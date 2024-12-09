@@ -8,13 +8,16 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: sql.qmd
+        text: SQL
 
 format:
   html:
-    theme: cosmo
+    theme: flatly
     css: styles.css
     toc: true
+
+
 
 
 
