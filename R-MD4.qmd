@@ -18,7 +18,7 @@ library(kableExtra)
 ```{r}
 f <- function(x){
   df <- data.frame(
-    mean = mean(x),
+    mean = round(mean(x),3),
     median = median(x),
     maximum = max(x),
     minimum = min(x)
@@ -27,4 +27,26 @@ f <- function(x){
 }
 vec <- c(1,5,6,8,14,6,3)
 kbl(f(vec))
+```
+
+> Create a function that takes a string and a number n as an input. Function must
+> return n−th symbol of the string. If n is less than 1, function should give an error message
+> stating that; if n is greater than number of symbols in the string, function should return
+> the last symbol.
+
+```{r}
+# izveidoju funkciju
+
+f <- function(n,string){
+  
+
+#error hadling
+  if(n < 1 ){
+    warning("n is 0. 1 will be used instead\n")
+    n <-1 
+  }
+  
+  return(n)
+}
+
 ```
