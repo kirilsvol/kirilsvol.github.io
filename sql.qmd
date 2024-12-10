@@ -30,25 +30,19 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 
 -   **Atribūti:** ManufacturerName, ContactInfo
 
--   Šī entītija apraksta preču ražotājus. Katram ražotājam ir unikāls identifikators (`ManufacturerID`), kā arī kontakta informācija un nosaukums.
+-   Šī entītija apraksta preču ražotājus. Katram ražotājam ir unikāls identifikators (ManufacturerID), kā arī kontakta informācija un nosaukums.
 
 #### **Preces** (Products)
 
 -   **Atribūti:** ProductName, EAN, Unit, BasePrice, PackageAmount.
 
--   Entītija, kas apraksta preces ar to unikālo ID (`ProductID`). Ietver detalizētu informāciju, piemēram, vienības mērvienību, cenu, iepakojuma daudzumu un svītrkodu (`EAN`).
-
--   **Saistības:**
-
-    -   Katru preci ražo viens ražotājs (M:1).
-
-    -   Preces ir saistītas ar pasūtījuma detaļām (M:M), kas norāda, ka preces var tikt iekļautas dažādos pasūtījumos.
+-   Entītija, kas apraksta preces ar to unikālo ID (ProductID). Ietver detalizētu informāciju, piemēram, vienības mērvienību, cenu, iepakojuma daudzumu un svītrkodu (EAN).
 
 #### **Atlaidu grupa** (DiscountGroups)
 
 -   **Atribūti:** DiscountGroupName, DiscountPercentage.
 
--   Atlaides grupa klasificē klientus, piešķirot viņiem konkrētu atlaides procentu. Katram ierakstam ir unikāls ID (`DiscountGroupID`).
+-   Atlaides grupa klasificē klientus, piešķirot viņiem konkrētu atlaides procentu. Katram ierakstam ir unikāls ID (DiscountGroupID).
 
 #### **Klienti** (Clients)
 
@@ -64,7 +58,7 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 
 #### **Pasūtījuma detaļas** (OrderDetails)
 
--   **Atribūti:** `Quantity`, `UnitPrice`.
+-   **Atribūti:** Quantity, UnitPrice.
 
 -   Apvieno pasūtījumus ar precēm, norādot daudzumu un cenu katrai precei konkrētajā pasūtījumā.
 
@@ -80,7 +74,7 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 
 #### **Pasūtījumi ↔ Pasūtījuma detaļas** (1:M)
 
--   Katrs pasūtījums var saturēt vairākus produktus. Šīs attiecības tiek detalizētas tabulā `OrderDetails`.
+-   Katrs pasūtījums var saturēt vairākus produktus. Šīs attiecības tiek detalizētas tabulā OrderDetails.
 
 #### **Preces ↔ Ražotājs** (M:1)
 
