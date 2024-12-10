@@ -6,14 +6,25 @@ title: "R Language Basics: Homework 4"
 > min, mean, median and max value.
 
 ```{r}
-x <- c(4,5,6)
+#| warning: false
+#| error: false
+#| echo: false
+
+library(tidyverse)
+library(kableExtra)
+
+```
+
+```{r}
 f <- function(x){
   df <- data.frame(
     mean = mean(x),
     median = median(x),
     maximum = max(x),
-    minimum = min(x),
-    print(df)
+    minimum = min(x)
   )
+  return(df)
 }
+vec <- c(1,5,6,8,14,6,3)
+kbl(f(vec))
 ```

@@ -12,11 +12,14 @@ website:
       - text: "SQL"
         menu:
           - href: sql.qmd
-          - text: SQL Gala darbs
       - text: "R"
         menu:
           - href: R-MD4.qmd
-          - text: MD 4
+      - text: "Forecast"
+        menu:
+          - href: LRKPM.qmd
+          - href: regr.qmd
+
  
 format:
   html:
