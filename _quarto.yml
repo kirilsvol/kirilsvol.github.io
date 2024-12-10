@@ -4,13 +4,20 @@ project:
 
 website:
   title: "KV"
+  back-to-top-navigation: true
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - href: sql.qmd
-        text: SQL
-
+      - text: "SQL"
+        menu:
+          - href: sql.qmd
+          - text: SQL Gala darbs
+      - text: "R"
+        menu:
+          - href: R-MD4.qmd
+          - text: MD 4
+ 
 format:
   html:
     theme: flatly
