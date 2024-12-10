@@ -1,10 +1,11 @@
 ---
-title: "SQL "
-author: "Kirils Volobujevs"
+title: "SQL EKSĀMENS"
+
 lightbox: true
 format:
   html:
     code-tools: true
+    mainfont: system-ui
 ---
 
 # BIZNESA LOĢIKA
@@ -15,91 +16,85 @@ Uzņēmuma piedāvātas preču klāsts ir no vairākiem ražotājiem un preču g
 
 Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēmuma klienti ir juridiskas personas personas.
 
-Objektu skaits:
+------------------------------------------------------------------------
 
--   Klienti : \~ 1000
+# ENTĪTIJU-ATTIECĪBU (ER) DIAGRAMMA
 
--   Preču skaits : \~ 40 000
-
--   Ražotāju skaits : \~ 100
-
--   Preču grupu skaits : \~ 4000
+![](MD1%20ER.drawio.png){fig-align="center"}
 
 # ENTĪTIJAS UN TO ATRIBŪTES
 
-**1.1  Preces (Products)**
+**1** **Entitātes un to atribūti:**
 
--   ProductID (primārā atslēga)
+#### **Ražotājs** (Manufacturer)
 
--   ProductName
+-   **Atribūti:** ManufacturerName, ContactInfo
 
--   SupplierID
+-   Šī entītija apraksta preču ražotājus. Katram ražotājam ir unikāls identifikators (`ManufacturerID`), kā arī kontakta informācija un nosaukums.
 
--   EAN
+#### **Preces** (Products)
 
--   Unit
+-   **Atribūti:** ProductName, EAN, Unit, BasePrice, PackageAmount.
 
--   Manufacturer
+-   Entītija, kas apraksta preces ar to unikālo ID (`ProductID`). Ietver detalizētu informāciju, piemēram, vienības mērvienību, cenu, iepakojuma daudzumu un svītrkodu (`EAN`).
 
--   BasePrice
+-   **Saistības:**
 
--   PackageAmount
+    -   Katru preci ražo viens ražotājs (M:1).
 
-**1.2  Ražotāji (Manufacturers)**
+    -   Preces ir saistītas ar pasūtījuma detaļām (M:M), kas norāda, ka preces var tikt iekļautas dažādos pasūtījumos.
 
--   ManufacturerID (primārā atslēga)
+#### **Atlaidu grupa** (DiscountGroups)
 
--   ManufacturerName
+-   **Atribūti:** DiscountGroupName, DiscountPercentage.
 
--   ContactInfo
+-   Atlaides grupa klasificē klientus, piešķirot viņiem konkrētu atlaides procentu. Katram ierakstam ir unikāls ID (`DiscountGroupID`).
 
-**1.3  Klienti (Clients)**
+#### **Klienti** (Clients)
 
--   ClientID (primārā atslēga)
+-   **Atribūti:** ClientName, RegistrationNumber, Address.
 
--   ClientName
+-   Apraksta klientus ar unikālu reģistrācijas numuru un adresi. Klienti pieder vienai atlaides grupai.
 
--   RegistrationNumber
+#### **Pasūtījumi** (Orders)
 
--   Address
+-   **Atribūti:** OrderDate, TotalAmount.
 
--   DiscountGroupID (ārējā atslēga uz **Atlaižu grupām**)
+-   Apraksta pasūtījumus, kas veikti no klientiem. Pasūtījuma datums un kopējā summa ir galvenie atribūti.
 
-**1.4  Atlaižu grupas (DiscountGroups)**
+#### **Pasūtījuma detaļas** (OrderDetails)
 
--   DiscountGroupID (primārā atslēga)
+-   **Atribūti:** `Quantity`, `UnitPrice`.
 
--   DiscountGroupName
+-   Apvieno pasūtījumus ar precēm, norādot daudzumu un cenu katrai precei konkrētajā pasūtījumā.
 
--   DiscountPercentage
+### 2. **Saistību analīze:**
 
-**1.5  Pasūtījumi (Orders)**
+#### **Klienti ↔ Atlaidu grupa** (M:1)
 
--   OrderID (primārā atslēga)
+-   Katrs klients pieder vienai atlaides grupai, bet viena atlaides grupa var būt saistīta ar vairākiem klientiem.
 
--   OrderDate
+#### **Klienti ↔ Pasūtījumi** (1:M)
 
--   TotalAmount
+-   Viens klients var veikt vairākus pasūtījumus. Katram pasūtījumam ir unikāls ID, kas identificē klienta aktivitāti.
 
-**1.6  Pasūtījumu detaļas (OrderDetails)**
+#### **Pasūtījumi ↔ Pasūtījuma detaļas** (1:M)
 
--   OrderDetailID (primārā atslēga)
+-   Katrs pasūtījums var saturēt vairākus produktus. Šīs attiecības tiek detalizētas tabulā `OrderDetails`.
 
--   OrderID (ārējā atslēga uz **Pasūtījumiem**)
+#### **Preces ↔ Ražotājs** (M:1)
 
--   ProductID (ārējā atslēga uz **Precēm**)
+-   Vienu preci var ražot tikai viens ražotājs, bet viens ražotājs var ražot vairākas preces.
 
--   Quantity
+#### **Preces ↔ Pasūtījuma detaļas** (M:M)
 
--   UnitPrice
+-   Preces var būt iekļautas vairākos pasūtījumos, savukārt katrs pasūtījums var ietvert vairākas preces.
+
+------------------------------------------------------------------------
 
 # DATUBĀZES RELĀCIJAS MODELIS
 
 ![Entītuju diagramma](Entītiju%20diagramma.drawio.png){fig-align="center"}
-
-Vienai preču grupai var būt vairāki klienti. Vienam pasūtījumam var būt vienīgi viens klients. Pasūtījumu detaļās var būt vairāki pasūtījumi un vairākas preces. Vienam ražotājam var būt vairākas preces.
-
-![ER Diagramma](MD1%20ER.drawio.png){fig-align="center"}
 
 ## TABULU STRUKTŪRA
 
@@ -146,18 +141,135 @@ Vienai preču grupai var būt vairāki klienti. Vienam pasūtījumam var būt vi
 |  | OrderDate |  | Pasūtījuma datums |  | DATE |  |   |  |   |  | DEFAULT NULL |  |
 |  | TotalAmount |  | Pasūtījuma summa |  | NUMBER |  | 10,2 |  |   |  | NOT NULL |  |
 
-| Pasūtījumu detaļas |   |   |   |   |   |   |   |   |   |   |   |   |
-|------|------|------|------|------|------|------|------|------|------|------|------|------|
-|  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |
-|  | OrderDetailID |  | Pasūtījums detaļu identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |
-|  | OrderID |  | Pasūtījuma identifikācijas numurs |  | NUMBER |  | Long Integer |  | Foreign Key |  | NOT NULL |  |
-|  | ProductID |  | prece identifikācijas numurs |  | NUMBER |  | Long Integer |  | Foreign Key |  | NOT NULL |  |
-|  | Quantity |  | Pārdotais daudzums |  | NUMBER |  | 5 |  |   |  | NOT NULL |  |
-|  | UnitPrice |  | Pārdošanas cena |  | UnitPrice |  | 10,2 |  |   |  | NOT NULL |  |
+<table style="width:99%;">
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><hr />
+<p>Pasūtījumu detaļas</p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+<th><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td><p><strong>Lauks</strong></p></td>
+<td></td>
+<td><p><strong>Apraksts</strong></p></td>
+<td></td>
+<td><p><strong>Datu tips</strong></p></td>
+<td></td>
+<td><p><strong>Izmērs</strong></p></td>
+<td></td>
+<td><p><strong>Statuss</strong></p></td>
+<td></td>
+<td><p><strong>Ierobežojumi</strong></p></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><p>OrderDetailID</p></td>
+<td></td>
+<td><p>Pasūtījums detaļu identifikācijas numurs</p></td>
+<td></td>
+<td><p>NUMBER</p></td>
+<td></td>
+<td><p>Long Integer</p></td>
+<td></td>
+<td><p>Primary Key</p></td>
+<td></td>
+<td><p>NOT NULL</p></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><p>OrderID</p></td>
+<td></td>
+<td><p>Pasūtījuma identifikācijas numurs</p></td>
+<td></td>
+<td><p>NUMBER</p></td>
+<td></td>
+<td><p>Long Integer</p></td>
+<td></td>
+<td><p>Foreign Key</p></td>
+<td></td>
+<td><p>NOT NULL</p></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><p>ProductID</p></td>
+<td></td>
+<td><p>prece identifikācijas numurs</p></td>
+<td></td>
+<td><p>NUMBER</p></td>
+<td></td>
+<td><p>Long Integer</p></td>
+<td></td>
+<td><p>Foreign Key</p></td>
+<td></td>
+<td><p>NOT NULL</p></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><p>Quantity</p></td>
+<td></td>
+<td><p>Pārdotais daudzums</p></td>
+<td></td>
+<td><p>NUMBER</p></td>
+<td></td>
+<td><p>5</p></td>
+<td></td>
+<td><p> </p></td>
+<td></td>
+<td><p>NOT NULL</p></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><p>UnitPrice</p></td>
+<td></td>
+<td><p>Pārdošanas cena</p></td>
+<td></td>
+<td><p>UnitPrice</p></td>
+<td></td>
+<td><p>10,2</p></td>
+<td></td>
+<td><p> </p></td>
+<td></td>
+<td><p>NOT NULL</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
-# ENTĪTIJU-ATTIECĪBU (ER) DIAGRAMMA
-
-![](MD1%20ER.drawio.png){fig-align="center"}
+------------------------------------------------------------------------
 
 # SQL KODS
 
@@ -216,120 +328,196 @@ CREATE TABLE OrderDetails (
 );
 ```
 
+------------------------------------------------------------------------
+
 ### Tabulu aizpildīšana
 
 ``` sql
 INSERT INTO Manufacturers VALUES (101, 'Elektronika Ltd.', 'info@elektronika.com');
-
 INSERT INTO Manufacturers VALUES (102, 'Kabeļu Risinājumi', 'contact@kabris.lv');
-
 INSERT INTO Manufacturers VALUES (103, 'Drošības Sistēmas', 'support@drosiba.lv');
+INSERT INTO Manufacturers VALUES (104, 'BalticTech Solutions', 'sales@baltictech.lv');
+INSERT INTO Manufacturers VALUES (105, 'ElektroSmart', 'info@elektrosmart.com');
+INSERT INTO Manufacturers VALUES (106, 'SafeWire Systems', 'contact@safewire.lv');
 
 INSERT INTO DiscountGroups VALUES (1, 'Klients C', 5.00);
-
 INSERT INTO DiscountGroups VALUES (2, 'Klients B', 10.00);
-
 INSERT INTO DiscountGroups VALUES (3, 'Klients A', 15.00);
+INSERT INTO DiscountGroups VALUES (4, 'Klients D', 3.00);
+INSERT INTO DiscountGroups VALUES (5, 'Klients E', 7.50);
 
 INSERT INTO Clients VALUES (1, 'Tesco SIA', '12345678910', 'Pilsētas iela 10', 1);
-
 INSERT INTO Clients VALUES (2, 'Walmarts SIA', '23456789012', 'Dārza iela 15', 2);
-
 INSERT INTO Clients VALUES (3, 'Kaprs SIA', '34567890123', 'Rīgas iela 50', 3);
-
 INSERT INTO Clients VALUES (4, 'RISBEA SIA', '09876543211', 'Ostas iela 25', 2);
-
 INSERT INTO Clients VALUES (5, 'LULA SIA', '01928374651', 'Mazā iela 5', 1);
+INSERT INTO Clients VALUES (6, 'Maxima SIA', '45678901234', 'Liepājas prospekts 7', 4);
+INSERT INTO Clients VALUES (7, 'Elko Grupa', '56789012345', 'Ganību dambis 22', 5);
+INSERT INTO Clients VALUES (8, 'Rimi Latvia', '67890123456', 'Ulmaņa gatve 101', 3);
+INSERT INTO Clients VALUES (9, 'Prisma SIA', '78901234567', 'Brīvības bulvāris 12', 2);
+INSERT INTO Clients VALUES (10, 'Elektro Serviss', '89012345678', 'Maskavas iela 246', 5);
 
 INSERT INTO Products VALUES (1, 'Elektrības kabelis 3x1.5mm', 'CAB101', '12345678901', 'm', 101, 0.85, 100);
-
 INSERT INTO Products VALUES (2, 'Elektrības kabelis 3x2.5mm', 'CAB102', '23456789012', 'm', 101, 1.20, 100);
-
 INSERT INTO Products VALUES (3, 'Sadalne kārba 100x100mm', 'FE10', '34567890123', 'gb', 102, 3.50, 1);
-
 INSERT INTO Products VALUES (4, 'PVC truba 16mm', 'PIPE301', 'RLM16p', 'm', 102, 0.75, 50);
-
 INSERT INTO Products VALUES (5, 'Vadu savienojuma skava', 'u-16', '56789012345', 'gb', 103, 0.10, 100);
-
 INSERT INTO Products VALUES (6, 'Drošinātājs 16A', '16A2', '67890123456', 'gb', 103, 1.25, 10);
-
 INSERT INTO Products VALUES (7, 'Vadu marķieris', 'a123', '78901234567', 'gb', 103, 0.50, 50);
 
-INSERT INTO Orders VALUES (1001,1, TO_DATE('2024-11-01', 'YYYY-MM-DD'), 125.00);
-
-INSERT INTO Orders VALUES (1002,1, TO_DATE('2024-11-02', 'YYYY-MM-DD'), 75.00);
-
-INSERT INTO Orders VALUES (1003,3, TO_DATE('2024-11-03', 'YYYY-MM-DD'), 250.00);
-
-INSERT INTO Orders VALUES (1004,5, TO_DATE('2024-11-04', 'YYYY-MM-DD'), 90.00);
+INSERT INTO Orders VALUES (1001, 1, TO_DATE('2024-11-01', 'YYYY-MM-DD'), 125.00);
+INSERT INTO Orders VALUES (1002, 1, TO_DATE('2024-11-02', 'YYYY-MM-DD'), 75.00);
+INSERT INTO Orders VALUES (1003, 3, TO_DATE('2024-11-03', 'YYYY-MM-DD'), 250.00);
+INSERT INTO Orders VALUES (1004, 5, TO_DATE('2024-11-04', 'YYYY-MM-DD'), 90.00);
+INSERT INTO Orders VALUES (1005, 2, TO_DATE('2024-11-05', 'YYYY-MM-DD'), 180.00);
+INSERT INTO Orders VALUES (1006, 6, TO_DATE('2024-11-06', 'YYYY-MM-DD'), 220.00);
+INSERT INTO Orders VALUES (1007, 8, TO_DATE('2024-11-07', 'YYYY-MM-DD'), 95.50);
+INSERT INTO Orders VALUES (1008, 9, TO_DATE('2024-11-08', 'YYYY-MM-DD'), 150.75);
+INSERT INTO Orders VALUES (1009, 7, TO_DATE('2024-11-09', 'YYYY-MM-DD'), 300.00);
+INSERT INTO Orders VALUES (1010, 10, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 120.50);
 
 INSERT INTO OrderDetails VALUES (2001, 1001, 1, 100, 0.85);
-
 INSERT INTO OrderDetails VALUES (2002, 1001, 3, 5, 3.50);
-
 INSERT INTO OrderDetails VALUES (2003, 1002, 2, 50, 1.20);
-
 INSERT INTO OrderDetails VALUES (2004, 1003, 4, 100, 0.75);
-
 INSERT INTO OrderDetails VALUES (2005, 1004, 6, 10, 1.25);
-
 INSERT INTO OrderDetails VALUES (2006, 1004, 7, 20, 0.50);
+INSERT INTO OrderDetails VALUES (2007, 1005, 2, 100, 1.20);
+INSERT INTO OrderDetails VALUES (2008, 1005, 5, 50, 0.10);
+INSERT INTO OrderDetails VALUES (2009, 1006, 9, 20, 1.75);
+INSERT INTO OrderDetails VALUES (2010, 1006, 10, 15, 2.25);
+INSERT INTO OrderDetails VALUES (2011, 1007, 8, 30, 2.50);
+INSERT INTO OrderDetails VALUES (2012, 1008, 11, 10, 3.00);
+INSERT INTO OrderDetails VALUES (2013, 1008, 12, 50, 1.10);
+INSERT INTO OrderDetails VALUES (2014, 1009, 1, 150, 0.85);
+INSERT INTO OrderDetails VALUES (2015, 1009, 3, 10, 3.50);
+INSERT INTO OrderDetails VALUES (2016, 1009, 5, 75, 0.10);
+INSERT INTO OrderDetails VALUES (2017, 1010, 6, 15, 1.25);
+INSERT INTO OrderDetails VALUES (2018, 1010, 7, 25, 0.50);
+INSERT INTO OrderDetails VALUES (2019, 1010, 9, 10, 1.75);
+INSERT INTO OrderDetails VALUES (2020, 1010, 12, 40, 1.10);
 ```
 
-### Vienkārši vaicājumi
+------------------------------------------------------------------------
+
+### Pamata vaicājumi
 
 ``` sql
 -- Atjaunina produkta cenu
 UPDATE Products  
-SET BasePrice = 1.50  
-WHERE ProductID = 2;
+SET BasePrice = 2.25  
+WHERE ProductID = 4;
 
 -- Pievieno jaunu klientu
-INSERT INTO Clients VALUES (6, 'TESTA KLIENTS', '0192837465', 'testa iela 6', 3);
+INSERT INTO Clients VALUES (11, 'Baltijas Energo', '55544433322', 'Brīvības gatve 77', 2);
 
 -- Dzēš klientu no tabulas Clients
 DELETE FROM Clients 
-WHERE ClientID = 6;
+WHERE ClientID = 11;
 
--- Atlasa visas rindas no tabulas "OrderDetails", kurām ProductID ir 7
+-- Atlasa visas rindas no tabulas "OrderDetails", kurām ProductID ir 6
 SELECT * 
 FROM OrderDetails  
-WHERE ProductID = 7;
+WHERE ProductID = 6;
 
--- Atlasa produkta ar ID 7 bāzes cenu no tabulas "Products"
+-- Atlasa produkta ar ID 11 bāzes cenu no tabulas "Products"
 SELECT BasePrice 
 FROM Products  
-WHERE ProductID = 7;
+WHERE ProductID = 5;
 
--- Noņem kolonnu "UnitPrice" no tabulas "OrderDetails"
+-- Pievieno jaunu kolonnu 
 ALTER TABLE OrderDetails 
-DROP COLUMN UnitPrice;
+ADD DiscountAmount NUMBER(10, 2);
+
+-- Noņem kolonnu "DiscountAmount" no tabulas "OrderDetails"
+ALTER TABLE OrderDetails 
+DROP COLUMN DiscountAmount;
 ```
+
+------------------------------------------------------------------------
+
+### Vienkārša vaicājumi
+
+1.  **Atlasa ražotāju ID, nosaukumu un kontaktinformāciju no tabulas "Manufacturers"**
 
 ``` sql
 SELECT ManufacturerID, ManufacturerName, ContactInfo 
 FROM Manufacturers;
+```
 
+![](images/clipboard-113818120.png)
+
+2.  **Atlasa klientu ID, vārdu un reģistrācijas numuru no tabulas "Clients", kuri pieder atlaižu grupai ar ID 2**
+
+``` sql
 SELECT ClientID, ClientName, RegistrationNumber 
 FROM Clients 
 WHERE DiscountGroupID = 2;
+```
 
+![](images/clipboard-272639722.png)
+
+3.  **Atlasa produktu nosaukumu, bāzes cenu un mērvienību no tabulas "Products" un sakārto rezultātus pēc cenas dilstošā secīb**ā
+
+``` {.sql .ыйд}
 SELECT ProductName, BasePrice, Unit 
 FROM Products 
 ORDER BY BasePrice DESC;
-
-SELECT ClientName 
-FROM Clients 
-Where LENGTH(ClientName)=10;
-
-SELECT ProductID, ProductName, BasePrice 
-FROM Products 
-WHERE mod(ProductID , 2) = 1 AND BasePrice > 1 
-ORDER BY BasePrice DESC;
 ```
 
+![](images/clipboard-2614051458.png)
+
+4.  **Atlasa klientu vārdus no tabulas "Clients", kuriem vārda garums (simbolu skaits) ir tieši 10**
+
 ``` sql
--- Atlasa produktu nosaukumus, ražotāju nosaukumus un bāzes cenas, kur bāzes cena ir mazāka par 1.00
+SELECT ClientName 
+FROM Clients 
+WHERE LENGTH(ClientName) = 10;
+```
+
+![](images/clipboard-2111685900.png)
+
+5.  **Aprēķina visu pasūtījumu kopējo summu**
+
+``` sql
+SELECT SUM(TotalAmount) AS KopējaSumma 
+FROM Orders;
+```
+
+![](images/clipboard-4105273519.png)
+
+6.  **Izvada pasūtījumus, kas veikti 2024. gada novembrī**
+
+``` sql
+SELECT * 
+FROM Orders 
+WHERE OrderDate BETWEEN TO_DATE('2024-11-01', 'YYYY-MM-DD') AND TO_DATE('2024-11-30', 'YYYY-MM-DD');
+```
+
+![](images/clipboard-2970340660.png)
+
+7.  **Aprēķina kopējo cenu katrai pasūtījuma detaļai**
+
+``` sql
+SELECT 
+    OrderDetailID, 
+    OrderID, 
+    ProductID, 
+    Quantity, 
+    UnitPrice, 
+    (Quantity * UnitPrice) AS KopējāCena 
+FROM OrderDetails;
+```
+
+![](images/clipboard-2207981607.png)
+
+------------------------------------------------------------------------
+
+### Vidējas sarežģītības vaicājumi
+
+1.  **Atlasa produktu nosaukumus, ražotāju nosaukumus un bāzes cenas, kur bāzes cena ir mazāka par 1.00**
+
+``` sql
 SELECT  
     p.ProductName,  
     m.ManufacturerName,  
@@ -337,31 +525,259 @@ SELECT
 FROM Products p 
 JOIN Manufacturers m ON p.ManufacturerID = m.ManufacturerID 
 WHERE p.BasePrice < 1.00;
+```
 
--- Atlasa produktus ar informāciju, kur ražotāja nosaukums satur vārdu "Elektronika"
+![](images/clipboard-570016716.png)
+
+2.  **Atlasa produktus ar informāciju, kur ražotāja nosaukums satur vārdu "Elektronika"**
+
+``` sql
 SELECT ProductID, ProductName, BasePrice, Unit  
 FROM Products p  
 JOIN Manufacturers m ON p.ManufacturerID = m.ManufacturerID  
 WHERE m.ManufacturerName LIKE '%Elektronika%';
+```
 
--- Atlasa klientus un viņu veikto pasūtījumu skaitu, sakārtotus pēc pasūtījumu skaita dilstošā secībā
+![](images/clipboard-3709397549.png)
+
+3.  **Atlasa klientus un viņu veikto pasūtījumu skaitu, sakārtotus pēc pasūtījumu skaita dilstošā secībā**
+
+``` sql
 SELECT c.ClientName, COUNT(o.OrderID) AS PasutijumuSkaits 
 FROM Clients c 
 LEFT JOIN Orders o ON c.ClientID = o.ClientID 
 GROUP BY c.ClientName 
 ORDER BY PasutijumuSkaits DESC;
+```
 
--- Atlasa pasūtījumus, klientus un pasūtījuma datumu, kur pasūtījuma summa ir lielāka par 100, sakārtotus dilstošā secībā pēc summas
+![](images/clipboard-3386070423.png)
+
+4.  **Atlasa pasūtījumus, klientus un pasūtījuma datumu, kur pasūtījuma summa ir lielāka par 100, sakārtotus dilstošā secībā pēc summas**
+
+``` sql
 SELECT o.OrderID, c.ClientName, o.OrderDate, o.TotalAmount 
 FROM Orders o 
 JOIN Clients c ON o.ClientID = c.ClientID 
 WHERE o.TotalAmount > 100 
 ORDER BY o.TotalAmount DESC;
+```
 
--- Atlasa pasūtījumu detaļas ar produktu nosaukumiem, kas satur vārdu "kabelis"
+![](images/clipboard-462818016.png)
+
+5.  **Atlasa pasūtījumu detaļas ar produktu nosaukumiem, kas satur vārdu "kabelis"**
+
+``` sql
 SELECT o.OrderID, p.ProductName, od.Quantity  
 FROM OrderDetails od  
 JOIN Products p ON od.ProductID = p.ProductID  
 JOIN Orders o ON od.OrderID = o.OrderID  
 WHERE p.ProductName LIKE '%kabelis%';
 ```
+
+![](images/clipboard-1434768332.png)
+
+6.  **Atlasa klientu vārdus un atbilstošās atlaižu grupas**
+
+``` sql
+SELECT c.ClientName AS Klients, d.DiscountGroupName AS AtlaižuGrupa 
+FROM Clients c
+JOIN DiscountGroups d 
+ON c.DiscountGroupID = d.DiscountGroupID;
+```
+
+![](images/clipboard-3898944190.png)
+
+7.  **Atlasa unikālos ražotāju nosaukumus no produktiem**
+
+``` sql
+SELECT DISTINCT m.ManufacturerName  
+FROM Manufacturers m 
+JOIN Products p  ON m.ManufacturerID = p.ManufacturerID;
+```
+
+![](images/clipboard-3186125587.png)
+
+------------------------------------------------------------------------
+
+### Paaugstinātas sarežģītības vaicājumi
+
+#### 1. Rangs un blīvais rangs klientiem pēc pasūtījuma summas atlaižu grupās
+
+``` sql
+SELECT ProductID, ProductName,  ManufacturerID,  BasePrice, 
+    RANK() OVER (PARTITION BY ManufacturerID ORDER BY BasePrice DESC) AS PriceRank -- Produkta cenas rangs katra ražotāja ietvaros
+FROM 
+    Products
+```
+
+![](images/clipboard-3908967136.png)
+
+**Darbības un paskaidrojumi**
+
+*PARTITION BY ManufacturerID*: Nodrošina, ka rangs tiek aprēķināts atsevišķi katram ražotājam.
+
+*ORDER BY BasePrice DESC*: Nodrošina, ka augstāka cena iegūst zemāku rangu.
+
+*RANK()***:** Ja produktiem ir vienāda cena, tiem tiek piešķirts vienāds rangs, bet nākamais produkts saņem nākamo rangu.
+
+------------------------------------------------------------------------
+
+2.  **Klienti ar pasūtījumu kopējo summu un vidējo summu**
+
+``` sql
+-- Izvēlas klienta ID, vārdu un vidējo pasūtījumu summu
+SELECT 
+    c.ClientID, 
+    c.ClientName, 
+    AVG(o.TotalAmount) AS AverageOrder 
+FROM 
+    Clients c 
+JOIN 
+    Orders o ON c.ClientID = o.ClientID 
+GROUP BY 
+    c.ClientID, c.ClientName 
+HAVING 
+    AVG(o.TotalAmount) > 100; 
+```
+
+![](images/clipboard-2318797706.png)
+
+**Darbības un paskaidrojumi**
+
+*AVG (o.TotalAmount) AS AverageOrder:* Rezultātā attēlos pasūtījuma vidējos apjomus.
+
+*HAVING AVG(o.TotalAmount) \> 100 :* Apakšnosacījums, lai parāda tikai no pasūtījumiem, kuriem apjoms virs 100 eiro
+
+------------------------------------------------------------------------
+
+3.  **Klienti ar pasūtījumu kopējo summu un vidējo summu**
+
+``` sql
+SELECT 
+    ProductID,
+    ProductName, 
+    BasePrice
+FROM 
+    Products
+WHERE 
+    BasePrice > (SELECT AVG(BasePrice) FROM Products); -- Filtrē produktus ar cenu virs vidējās
+```
+
+![](images/clipboard-453020887.png)
+
+**Darbības un paskaidrojumi**
+
+*BasePrice \> (SELECT AVG(BasePrice) FROM Products) :* Attēlo vienīgi tos produktus, kuri izpilda salīdzinājumu starp individuālā produkta cenu un apakšvaicājuma rezultātā iegūto visu produktu vidējo cenu
+
+------------------------------------------------------------------------
+
+4.  **Klienti, kuru vidējā pasūtījuma summa ir augstāka par visiem klientiem kopumā**
+
+``` sql
+SELECT 
+    c.ClientID, 
+    c.ClientName, 
+    AVG(o.TotalAmount) AS AverageOrder -- Vidējā pasūtījuma summa
+FROM 
+    Clients c 
+JOIN 
+    Orders o ON c.ClientID = o.ClientID 
+GROUP BY 
+    c.ClientID, c.ClientName
+HAVING 
+    AVG(o.TotalAmount) > (
+        -- Apakšvaicājums, kas aprēķina vidējo pasūtījumu summu visiem klientiem
+        SELECT 
+            AVG(TotalAmount) 
+        FROM 
+            Orders
+    );
+```
+
+![](images/clipboard-1864780207.png)
+
+**Darbības un paskaidrojumi**
+
+*GROUP BY c.ClientID, c.ClientName* : Nepieciešams AVG funkciju izpildīšanai.
+
+*HAVING* : Izveido papildus nosacījumus datu filtrēšanai
+
+*( SELECT AVG(TotalAmount) FROM Orders ) :* Apakšvaicājums salīdzināšanai
+
+------------------------------------------------------------------------
+
+5.  **Produktu vērtības salīdzinājums ražotāju griezumā**
+
+``` sql
+SELECT 
+    ProductID,
+    ManufacturerID,
+    BasePrice,
+    RANK() OVER (
+        PARTITION BY ManufacturerID 
+        ORDER BY BasePrice DESC NULLS LAST
+    ) AS Total_Value_Rank,
+    DENSE_RANK() OVER (
+        PARTITION BY ManufacturerID 
+        ORDER BY BasePrice DESC NULLS LAST
+    ) AS Total_Value_Dense_Rank
+FROM 
+    Products
+WHERE 
+    ManufacturerID IN (101, 102)
+UNION
+SELECT 
+    ProductID,
+    ManufacturerID,
+    BasePrice,
+    RANK() OVER (
+        PARTITION BY ManufacturerID 
+        ORDER BY BasePrice DESC NULLS LAST
+    ) AS Total_Value_Rank,
+    DENSE_RANK() OVER (
+        PARTITION BY ManufacturerID 
+        ORDER BY BasePrice DESC NULLS LAST
+    ) AS Total_Value_Dense_Rank
+FROM 
+    Products
+WHERE 
+    ManufacturerID IN (103, 104)
+    AND BasePrice > 1.00;
+```
+
+![](images/clipboard-489606305.png)
+
+**Darbības un paskaidrojumi**
+
+``` sql
+RANK() OVER (
+    PARTITION BY ManufacturerID 
+    ORDER BY BasePrice DESC NULLS LAST
+) AS Total_Value_Rank
+```
+
+*RANK():* Piešķir rangu katrai vērtībai\
+*OVER ():* Definē window (datu loga) parametrus\
+*PARTITION BY:* Sadala datus grupās vadoties pēc ManufacturerID\
+*ORDER BY:* Nosaka ranžēšanas kārtību, pamatojoties uz BasePrice\
+*NULLS LAST:* Nulles vērtības novieto saraksta beigās
+
+> <div>
+>
+> Ja mums ir produkti no ražotāja 101:
+>
+> -   Produkts A: Cena 3.50 → Rank 1
+>
+> -   Produkts B: Cena 3.50 → Rank 1
+>
+> -   Produkts C: Cena 2.00 → Rank 3
+>
+> </div>
+
+``` sql
+SELECT ... WHERE ManufacturerID IN (101, 102)
+UNION
+SELECT ... WHERE ManufacturerID IN (103, 104)
+```
+
+Apvieno divu SELECT rezultātus. Izņem dublētās rindas. Ļauj kombinēt dažādus meklēšanas nosacījumus
