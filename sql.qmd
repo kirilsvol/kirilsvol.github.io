@@ -8,7 +8,7 @@ format:
     mainfont: system-ui
 ---
 
-# BIZNESA LOĢIKA
+# BIZNESA LOĢIKAs
 
 Uzņēmums RAD SIA – Būvmateriālu un elektroinstalācijas materiālu tirgotājs. Uzņēmums plāno implementēt ERP  (*angļ. Enterprise Resource Planning)* sistēmu, kurā tiks veikt visa uzņēmuma darbība. Uzņēmuma galvenās funkcijas ir preču pirkšana, pārdošana, glabāšana.
 
@@ -135,21 +135,21 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 |  | OrderDate |  | Pasūtījuma datums |  | DATE |  |   |  |   |  | DEFAULT NULL |  |
 |  | TotalAmount |  | Pasūtījuma summa |  | NUMBER |  | 10,2 |  |   |  | NOT NULL |  |
 
-<table style="width:99%;">
+<table style="width:89%;">
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
-<col style="width: 7%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
 </colgroup>
 <thead>
 <tr class="header">
