@@ -93,7 +93,7 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 ## TABULU STRUKTŪRA
 
 | Prece |   |   |   |   |   |   |   |   |   |   |   |   |
-|:----:|------|------|------|------|------|------|------|------|------|------|------|------|
+|:--:|----|----|----|----|----|----|----|----|----|----|----|----|
 |  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |
 |  | ProductID |  | Preces identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |
 |  | ProductName |  | Preces nosaukums |  | VARCHAR2 |  | 100 |  |   |  | NOT NULL |  |
@@ -105,14 +105,14 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 |  | PackageAmount |  | Preces daudzums iepakojumā |  | NUMBER |  |   |  |   |  | NOT NULL |  |
 
 | Ražotājs |   |   |   |   |   |   |   |   |   |   |   |   |
-|------|------|------|------|------|------|------|------|------|------|------|------|------|
+|----|----|----|----|----|----|----|----|----|----|----|----|----|
 |  | Lauks |  | Apraksts |  | Datu tips |  | Izmērs |  | Statuss |  | Ierobežojumi |  |
 |  | ManufacturerID |  | Ražotāja identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |
 |  | ManufacturerName |  | Ražotājs nosaukums |  | VARCHAR2 |  | 100 |  |   |  | NOT NULL |  |
 |  | ContactInfo |  | Ražotājs kontakt informācija |  | VARCHAR2 |  | 255 |  |   |  | NOT NULL |  |
 
 | Klienti |   |   |   |   |   |   |   |   |   |   |   |   |
-|------|------|------|------|------|------|------|------|------|------|------|------|------|
+|----|----|----|----|----|----|----|----|----|----|----|----|----|
 |  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |
 |  | ClientID |  | Klienta identifikācijas numurs |  | NUMBER |  |   |  | Primary Key |  | NOT NULL |  |
 |  | ClientName |  | Klienta nosaukums |  | VARCHAR2 |  | 100 |  |   |  | NOT NULL |  |
@@ -121,36 +121,21 @@ Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēm
 |  | DiscountGroupID |  | Atlaides grupas identifikācijas numurs |  | NUMBER |  |   |  | Foreign Key |  | NOT NULL |  |
 
 | Atlaižu grupa |   |   |   |   |   |   |   |   |   |   |   |   |
-|------|------|------|------|------|------|------|------|------|------|------|------|------|
+|----|----|----|----|----|----|----|----|----|----|----|----|----|
 |  | Lauks |  | Apraksts |  | Datu tips |  | Izmērs |  | Statuss |  | Ierobežojumi |  |
 |  | DiscountGroupID |  | Atlaižu grupas identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |
 |  | DiscountGroupName |  | Atlaižu grupas nosaukums |  | VARCHAR2 |  | 100 |  |   |  | NOT NULL |  |
 |  | DiscountPercentage |  | Preces atlaide % no pamata cenas |  | NUMBER |  | 5,2 |  |   |  | CHECK |  |
 
 | Pasūtījums |   |   |   |   |   |   |   |   |   |   |   |   |
-|------|------|------|------|------|------|------|------|------|------|------|------|------|
+|----|----|----|----|----|----|----|----|----|----|----|----|----|
 |  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |
 |  | OrderID |  | Pasūtījums identifikācijas numurs |  | NUMBER |  |   |  | Primary Key |  | NOT NULL |  |
 |  | ClientID |  | Klienta identifikācijas numurs |  | NUMBER |  |   |  | Foreign Key |  | NOT NULL |  |
 |  | OrderDate |  | Pasūtījuma datums |  | DATE |  |   |  |   |  | DEFAULT NULL |  |
 |  | TotalAmount |  | Pasūtījuma summa |  | NUMBER |  | 10,2 |  |   |  | NOT NULL |  |
 
-<table style="width:51%;">
-<colgroup>
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-</colgroup>
+<table>
 <thead>
 <tr class="header">
 <th><hr />
@@ -471,7 +456,7 @@ ggplot(sales_data, aes(x = reorder(ClientName, TotalSales), y = TotalSales)) +
 
 ## Darba ar Oracle SQL
 
-### Tabulu izveidošana 
+### Tabulu izveidošana
 
 ``` sql
 CREATE TABLE Manufacturers ( 
