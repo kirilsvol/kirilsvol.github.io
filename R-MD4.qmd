@@ -2,6 +2,8 @@
 title: "R Language Basics: Homework 4"
 ---
 
+------------------------------------------------------------------------
+
 > 1\. (1 point) Create a function that takes a vector as an input, and returns a data frame with min, mean, median and max value.
 
 ```{r}
@@ -28,12 +30,13 @@ vec <- c(1,5,6,8,14,6,3)
 kbl(f(vec))
 ```
 
+------------------------------------------------------------------------
+
 > Create a function that takes a string and a number n as an input. Function must return n−th symbol of the string. If n is less than 1, function should give an error message stating that; if n is greater than number of symbols in the string, function should return the last symbol.
 
 ```{r}
 # definējam ievadāmos mainīgos
 Teksts <- "MansTeksts"
-x <- 15
 # funkcijas inicializācija
 f <- function(n,s){
     # iegūstām string garumus
@@ -42,7 +45,6 @@ f <- function(n,s){
   if(n<=1){
     print("N nevar būt mazāks vai vienāds ar 1")
     n <- 1
-    return(n)
   }
   # pārbaudām vai n nav ārpus s garuma
   if ( n > s_lenght ){
@@ -55,17 +57,22 @@ f <- function(n,s){
   
 }
 
-f(x,Teksts)
+f(1,Teksts)
+f(5,Teksts)
+f(20,Teksts)
+
 
 ```
 
-(2 points) Create a function with input arguments J and K. The function should calculate:
+------------------------------------------------------------------------
 
-$$ X =\sum_{j=1}^{J}\sum_{k=1}^{K}\frac{k^2 \times j^5}{K^2} $$
-
-If any argument is missing in a function call, it must be replaced with number 5; if any
-argument in a function call is not strictly positive or is not a number, terminate the function
-and give an error messag
+> (2 points) Create a function with input arguments J and K. The function should calculate:
+>
+> $$ X =\sum_{j=1}^{J}\sum_{k=1}^{K}\frac{k^2 \times j^5}{K^2} $$
+>
+> If any argument is missing in a function call, it must be replaced with number 5; if any
+> argument in a function call is not strictly positive or is not a number, terminate the function
+> and give an error messag
 
 ```{r}
 math <- function(j,k){
