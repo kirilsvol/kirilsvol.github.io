@@ -55,7 +55,7 @@ f <- function(n,s){
   
 }
 
-f(x,Teksts
+f(x,Teksts)
 
 ```
 
@@ -73,7 +73,13 @@ math <- function(j,k){
   if(missing(j)){j=5}
   if(missing(k)){k=5}
   if(j<1 | k<1 | is.character(j) == TRUE| is.character(k)==TRUE){
-    stop("ERROR")
+  # sakarā ar to, ka STOP funkcija apstādina koda kompilāciju
+  # tā apstādina .qmd renderu. Tāpēc pārveidoju par warning()
+     # stop("EROR")
+    warning("ERROR IR INPUT")
+    
+    if(is.character(j)==TRUE){j=3}
+    if(is.character(k)==TRUE){k=3}
   }
 
   
@@ -81,6 +87,9 @@ result <- (sum(1:j))*(sum(1:k))*(k^2*j^5)/(sum(1:k)^2)
 paste("Result of equation is X=",result)  
   
 }
-math(a ,5)  
+math(75 ,5)  
+math(,3)
+math(3,)
+math("asr",5)
 
 ```
