@@ -2,8 +2,7 @@
 title: "R Language Basics: Homework 4"
 ---
 
-> 1\. (1 point) Create a function that takes a vector as an input, and returns a data frame with
-> min, mean, median and max value.
+> 1\. (1 point) Create a function that takes a vector as an input, and returns a data frame with min, mean, median and max value.
 
 ```{r}
 #| warning: false
@@ -29,24 +28,59 @@ vec <- c(1,5,6,8,14,6,3)
 kbl(f(vec))
 ```
 
-> Create a function that takes a string and a number n as an input. Function must
-> return n−th symbol of the string. If n is less than 1, function should give an error message
-> stating that; if n is greater than number of symbols in the string, function should return
-> the last symbol.
+> Create a function that takes a string and a number n as an input. Function must return n−th symbol of the string. If n is less than 1, function should give an error message stating that; if n is greater than number of symbols in the string, function should return the last symbol.
 
 ```{r}
-# izveidoju funkciju
-
-f <- function(n,string){
-  
-
-#error hadling
-  if(n < 1 ){
-    warning("n is 0. 1 will be used instead\n")
-    n <-1 
+# definējam ievadāmos mainīgos
+Teksts <- "MansTeksts"
+x <- 15
+# funkcijas inicializācija
+f <- function(n,s){
+    # iegūstām string garumus
+  s_lenght <- nchar(s)
+  # pārbaudām vai n nav mazāks vai vienāds ar 1
+  if(n<=1){
+    print("N nevar būt mazāks vai vienāds ar 1")
+    n <- 1
+    return(n)
   }
+  # pārbaudām vai n nav ārpus s garuma
+  if ( n > s_lenght ){
+    print("N nevar būt lielāks par kopējo teksta garumua")
+    return()
+  }
+
+  # iegustam n-th stringa simbolu
+  return (substr(s, n,n))
   
-  return(n)
 }
+
+f(x,Teksts
+
+```
+
+(2 points) Create a function with input arguments J and K. The function should calculate:
+
+$$ X =\sum_{j=1}^{J}\sum_{k=1}^{K}\frac{k^2 \times j^5}{K^2} $$
+
+If any argument is missing in a function call, it must be replaced with number 5; if any
+argument in a function call is not strictly positive or is not a number, terminate the function
+and give an error messag
+
+```{r}
+math <- function(j,k){
+  # Pārbaudām vai ir trūkstošas vērtības.
+  if(missing(j)){j=5}
+  if(missing(k)){k=5}
+  if(j<1 | k<1 | is.character(j) == TRUE| is.character(k)==TRUE){
+    stop("ERROR")
+  }
+
+  
+result <- (sum(1:j))*(sum(1:k))*(k^2*j^5)/(sum(1:k)^2)
+paste("Result of equation is X=",result)  
+  
+}
+math(a ,5)  
 
 ```
