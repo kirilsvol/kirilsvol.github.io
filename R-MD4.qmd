@@ -89,9 +89,18 @@ math <- function(j,k){
     if(is.character(k)==TRUE){k=3}
   }
 
-  
-result <- (sum(1:j))*(sum(1:k))*(k^2*j^5)/(sum(1:k)^2)
-paste("Result of equation is X=",result)  
+#nepareizi, neapreizs matemātiskais pamatojums
+#result <- (sum(1:j))*(sum(1:k))*(k^2*j^5)/(sum(1:k)^2)
+
+
+#`pareizs rezultāts
+# for (j in 1:J){
+#  for (k in 1:K){
+#    sub <- (k**2 * j)/ (5 + K**2)
+# x <- x + sub
+# }
+# }
+# paste("Result of equation is X=",result)  
   
 }
 math(75 ,5)  
