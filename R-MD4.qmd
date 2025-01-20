@@ -70,9 +70,7 @@ f(20,Teksts)
 >
 > $$ X =\sum_{j=1}^{J}\sum_{k=1}^{K}\frac{k^2 \times j^5}{K^2} $$
 >
-> If any argument is missing in a function call, it must be replaced with number 5; if any
-> argument in a function call is not strictly positive or is not a number, terminate the function
-> and give an error messag
+> If any argument is missing in a function call, it must be replaced with number 5; if any argument in a function call is not strictly positive or is not a number, terminate the function and give an error messag
 
 ```{r}
 math <- function(j,k){

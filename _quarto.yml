@@ -19,6 +19,7 @@ website:
       - text: "R"
         menu:
           - href: R-MD4.qmd
+          - href: rexam.qmd
  
 format:
   html:
