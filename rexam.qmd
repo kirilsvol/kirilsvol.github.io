@@ -9,7 +9,7 @@ title: "R Language Exam"
 ```{r}
 #| warning: false
 #| error: false
-#| echo: false
+
 
 # Bibliotēku ielāde ####
 
@@ -133,6 +133,7 @@ Dati ir par akciju rezultātiem no 2010. gada 1. janvāra, līdz 2022. gada 29. 
 Nepieciešams iepazīties ar sākotnējiem datiem, lai izvrizītu pētāmos jautājumus vai nakotnes hipotēzes
 
 ```{r}
+#| warning: false
 # grafiku attēlošanas funkcijas inicializēšana
 plot_stock <- function(comp){
   # Izveidojam mainīgo ar filtrētiem datiem
