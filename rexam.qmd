@@ -124,7 +124,7 @@ summary(data)
 
 Rezultātā ir iegūta viena, apvienota, tabula, ar mainītiem datu tipiem un tulkotiem nosaukumiem.
 
-## Aprakstošā statistika 
+## Aprakstošā statistika
 
 Dati ir par akciju rezultātiem no 2010. gada 1. janvāra, līdz 2022. gada 29. decembrim. Lai labāk izpētītu šos datus, nepieciešams izveidot papildus
 
