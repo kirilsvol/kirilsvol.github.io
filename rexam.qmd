@@ -116,6 +116,7 @@ data <- prices_data%>%
 Pēc datu sakārtošanas var atkārtot izpētes datu analīzi (*exploratory statistics*)
 
 ```{r}
+# veicam atkārtotu datu novērtēšanu
 skim(data)
 str(data)
 summary(data)
@@ -132,18 +133,44 @@ Dati ir par akciju rezultātiem no 2010. gada 1. janvāra, līdz 2022. gada 29. 
 Nepieciešams iepazīties ar sākotnējiem datiem, lai izvrizītu pētāmos jautājumus vai nakotnes hipotēzes
 
 ```{r}
+# grafiku attēlošanas funkcijas inicializēšana
 plot_stock <- function(comp){
+  # Izveidojam mainīgo ar filtrētiem datiem
   stock_subset <-  data %>% filter(company == comp)
   
+  # atridan katra uzņēmuma mazāko un augstāko vērtību
+  min_value <- min(stock_subset$atversanas_cena, na.rm = TRUE)
+  max_value <- max(stock_subset$atversanas_cena, na.rm = TRUE)
+  
+  min_date <- stock_subset$datums[which.min(stock_subset$atversanas_cena)]
+  max_date <- stock_subset$datums[which.max(stock_subset$atversanas_cena)]
+  
+  # grafika attēlošana
     ggplot(stock_subset, aes(x = datums)) +
+    # vizualizējam atvēršanas cenas
     geom_line(aes(y = atversanas_cena), color = "blue", size = 1) +
+    # pievienojam katram grafikam minimālās un maximālās vērtības
+    geom_point(aes(x = min_date, y = min_value), color = "red", size = 3) +
+    geom_point(aes(x = max_date, y = max_value), color = "green", size = 3) +
+    # pievienojam katrai ekstrēmai vērtīas
+      geom_text(aes(x = min_date, y = min_value, 
+                  label = paste("Min:", round(min_value, 2))), 
+              vjust = -1, hjust = -0.2, color = "red") +
+    
+    geom_text(aes(x = max_date, y = max_value, 
+                  label = paste("Max:", round(max_value, 2))), 
+              vjust = 1, hjust = 1.5 , color = "green") +
+
+
     ggtitle(paste(comp, "Akciju atvēršanas cena")) +
     xlab("Gads") + ylab("Cena") +
     theme_minimal()
 }
-unikals <- unique(data$company)
 
-for (stock in unikals){
+# grafika zīmēšanas cikls
+
+# attēlo grafikus katrai unikālai kompānijai
+for (stock in unique(data$company)){
   print(plot_stock(stock))
 }
 ```
@@ -153,13 +180,16 @@ for (stock in unikals){
 Akciju vidējais pārdotias skaits, vidējā dienas atdeve un tās standartnovirze
 
 ```{r}
+ #apllūkojam uzņēmumu aprakstošo satistiku
 data %>% 
-  #apllūkojam uzņēmumu aprakstošo satistiku
+  # grupējam datus pēc uzņēmuma
   group_by(company) %>% 
+  # veicam vēlamo datu attēlošanu
   summarise(
     vid_akciju_skaits = mean(akciju_skaits),
     vid_dienas_atdeve = round(mean(dienas_atdeve),3),
     standartnovirze = round(sd(dienas_atdeve),3)
     ) %>% 
+  # sortējam datus pēc izvēlētās kolonas
   arrange(vid_akciju_skaits)
 ```
