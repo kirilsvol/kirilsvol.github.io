@@ -25,7 +25,7 @@ library(skimr)
 ```{r}
 #| warning: false
 #| error: false
-#| echo: false
+
 # ielādējam datu objektu
 tuesdata <- tidytuesdayR::tt_load('2023-02-07')
 # sadalām objektu pa datuframe
@@ -33,12 +33,14 @@ prices <- tuesdata$big_tech_stock_prices
 companies <- tuesdata$big_tech_companies
 ```
 
-## 3. Veicam sākotnējo datu analīzi un izpētam pieejamos datus
+## 3. Veicam sākotnējo izpētes datu analīzi
+
+Pirms datu analīzes nepieciešamas izpētīt pieejamos datus un koriģēt tos tālākajam darbam
 
 ```{r}
 #| warning: false
 #| error: false
-#| echo: false
+
 # Datu analīze ####
 # summary statistics
 skim(prices)
@@ -46,14 +48,42 @@ skim(companies)
 
 ```
 
-Nelielas tabulas, tīras, nav trūksošo datu, tabula companies ir samērā maza, nepieciešams to apvienot ar pamat prices tabulu
+Pieejamas divas tabulas:
+
+-   *companies* - 2 kolonnas :
+
+    -   **stock_symbol** - akciju kodi
+
+    -   **company** - uzņēmuma nosaukumu
+
+-   *prices -* 6 kolonnas *:*
+
+    -   **date** - datums
+
+    -   **open** - akcijas vērtība dienas sākumā
+
+    -   **high -** akcijas dienas augstākā vērtība
+
+    -   **low -** akcijas dienas zemākā vērtība
+
+    -   **close -** akcijas vērtība dienas beigās
+
+    -   **adj_close -** slēgšanas cena pēc visu piemērojamo sadalīšanas un dividenžu sadales korekciju veikšanas
+
+    -   **volume** - šajā dienā tirgoto akciju skaits.
+
+Kopumā tabulas ir nelielas, kolonu zinā, bet kopējais datu apjoms ir ievērojams - 45088 tabulas ieraksti un 0 trūkošo datu.
+
+Tālākai apstrāde vai apvienot šīs tabulas ērtākam darbam
+
+### Tabulu apvienošana un tabulas manipulācijas
 
 ```{r}
 ## Tabulu apvienošana ####
-data <- prices %>% 
+prices_data <- prices %>% 
   left_join(companies, by = "stock_symbol")
 ## Tabulu datu tipu pārveidošana ####
-data %>% 
+data <- prices_data%>% 
   mutate(
     # definēja, ka date ir pareizā datu formāta
     date = as.Date(date, format = "%Y%m%d"),
@@ -61,10 +91,75 @@ data %>%
     stock_symbol = as.factor(stock_symbol),
     company = as.factor(company)
   ) %>% 
+  # starprezultātu saglabāšana
+  {. ->> data_with_datatypes } %>% 
     # pārsaucam tabulas kolonu
   rename(
-    "stock" = "stock_symbol"
+    "akcija" = "stock_symbol",
+    "datums" = "date",
+    "atversanas_cena" = "open",
+    "augstaka_cena"= "high",
+    "zemaka_cena"="low" ,
+    "slegsanas_cena" = "close",
+    "koregeta_slegsanas_cena" = "adj_close",
+   "akciju_skaits"=  "volume"
+  ) %>%
+  # pievienojam jaunu kolonu -  dienas atdevi, kur tiek rēķināta katrai rindai
+  mutate(
+    dienas_atdeve = round((prices_data$close - prices_data$open) / prices_data$open * 100,3)
   ) %>% 
   glimpse()
+
  
+```
+
+Pēc datu sakārtošanas var atkārtot izpētes datu analīzi (*exploratory statistics*)
+
+```{r}
+skim(data)
+str(data)
+summary(data)
+```
+
+Rezultātā ir iegūta viena, apvienota, tabula, ar mainītiem datu tipiem un tulkotiem nosaukumiem.
+
+## Aprakstošā statistika 
+
+Dati ir par akciju rezultātiem no 2010. gada 1. janvāra, līdz 2022. gada 29. decembrim. Lai labāk izpētītu šos datus, nepieciešams izveidot papildus
+
+### Sākotnējā datu vizualizācija
+
+Nepieciešams iepazīties ar sākotnējiem datiem, lai izvrizītu pētāmos jautājumus vai nakotnes hipotēzes
+
+```{r}
+plot_stock <- function(comp){
+  stock_subset <-  data %>% filter(company == comp)
+  
+    ggplot(stock_subset, aes(x = datums)) +
+    geom_line(aes(y = atversanas_cena), color = "blue", size = 1) +
+    ggtitle(paste(comp, "Akciju atvēršanas cena")) +
+    xlab("Gads") + ylab("Cena") +
+    theme_minimal()
+}
+unikals <- unique(data$company)
+
+for (stock in unikals){
+  print(plot_stock(stock))
+}
+```
+
+### Apskatīt akciju sumāros rezultātus
+
+Akciju vidējais pārdotias skaits, vidējā dienas atdeve un tās standartnovirze
+
+```{r}
+data %>% 
+  #apllūkojam uzņēmumu aprakstošo satistiku
+  group_by(company) %>% 
+  summarise(
+    vid_akciju_skaits = mean(akciju_skaits),
+    vid_dienas_atdeve = round(mean(dienas_atdeve),3),
+    standartnovirze = round(sd(dienas_atdeve),3)
+    ) %>% 
+  arrange(vid_akciju_skaits)
 ```
