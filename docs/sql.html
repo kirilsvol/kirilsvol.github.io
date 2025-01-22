@@ -238,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>BIZNESA LOĢIKAs</h1>
 <p>Uzņēmums RAD SIA – Būvmateriālu un elektroinstalācijas materiālu tirgotājs. Uzņēmums plāno implementēt ERP&nbsp; (<em>angļ. Enterprise Resource Planning)</em> sistēmu, kurā tiks veikt visa uzņēmuma darbība. Uzņēmuma galvenās funkcijas ir preču pirkšana, pārdošana, glabāšana.</p>
 <p>Uzņēmuma piedāvātas preču klāsts ir no vairākiem ražotājiem un preču grupām. Visām precēm ir pieejama pamata, jeb tarifa, cena. Katram klientam ir piesaistīta arī atlaižu grupa, kura norāda – atlaižu grupu katram klientam.</p>
-<p>Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēmuma klienti ir juridiskas personas personas.</p>
+<p>Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēmuma klienti ir juridiskas personas personas!</p>
 <hr>
 </section>
 <section id="entītiju-attiecību-er-diagramma" class="level1">
@@ -2418,7 +2418,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>Uzņēmuma piedāvātas preču klāsts ir no vairākiem ražotājiem un preču grupām. Visām precēm ir pieejama pamata, jeb tarifa, cena. Katram klientam ir piesaistīta arī atlaižu grupa, kura norāda – atlaižu grupu katram klientam.</span>
 <span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēmuma klienti ir juridiskas personas personas.</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>Uzņēmums ir vairumtirogotājs, strādājošs B2B segmentā – tāpēc uzņēmuma klienti ir juridiskas personas personas!</span>
 <span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
@@ -2497,7 +2497,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## TABULU STRUKTŪRA</span></span>
 <span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a>| Prece |   |   |   |   |   |   |   |   |   |   |   |   |</span>
-<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a>|:--:|----|----|----|----|----|----|----|----|----|----|----|----|</span>
+<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a>|:----:|------|------|------|------|------|------|------|------|------|------|------|------|</span>
 <span id="cb31-97"><a href="#cb31-97" aria-hidden="true" tabindex="-1"></a>|  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |</span>
 <span id="cb31-98"><a href="#cb31-98" aria-hidden="true" tabindex="-1"></a>|  | ProductID |  | Preces identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |</span>
 <span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a>|  | ProductName |  | Preces nosaukums |  | VARCHAR2 |  | 100 |  | &nbsp; |  | NOT NULL |  |</span>
@@ -2509,14 +2509,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a>|  | PackageAmount |  | Preces daudzums iepakojumā |  | NUMBER |  | &nbsp; |  | &nbsp; |  | NOT NULL |  |</span>
 <span id="cb31-106"><a href="#cb31-106" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-107"><a href="#cb31-107" aria-hidden="true" tabindex="-1"></a>| Ražotājs |   |   |   |   |   |   |   |   |   |   |   |   |</span>
-<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a>|----|----|----|----|----|----|----|----|----|----|----|----|----|</span>
+<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a>|------|------|------|------|------|------|------|------|------|------|------|------|------|</span>
 <span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a>|  | Lauks |  | Apraksts |  | Datu tips |  | Izmērs |  | Statuss |  | Ierobežojumi |  |</span>
 <span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a>|  | ManufacturerID |  | Ražotāja identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |</span>
 <span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a>|  | ManufacturerName |  | Ražotājs nosaukums |  | VARCHAR2 |  | 100 |  | &nbsp; |  | NOT NULL |  |</span>
 <span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a>|  | ContactInfo |  | Ražotājs kontakt informācija |  | VARCHAR2 |  | 255 |  | &nbsp; |  | NOT NULL |  |</span>
 <span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a>| Klienti |   |   |   |   |   |   |   |   |   |   |   |   |</span>
-<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a>|----|----|----|----|----|----|----|----|----|----|----|----|----|</span>
+<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a>|------|------|------|------|------|------|------|------|------|------|------|------|------|</span>
 <span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a>|  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |</span>
 <span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a>|  | ClientID |  | Klienta identifikācijas numurs |  | NUMBER |  | &nbsp; |  | Primary Key |  | NOT NULL |  |</span>
 <span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>|  | ClientName |  | Klienta nosaukums |  | VARCHAR2 |  | 100 |  | &nbsp; |  | NOT NULL |  |</span>
@@ -2525,14 +2525,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb31-121"><a href="#cb31-121" aria-hidden="true" tabindex="-1"></a>|  | DiscountGroupID |  | Atlaides grupas identifikācijas numurs |  | NUMBER |  | &nbsp; |  | Foreign Key |  | NOT NULL |  |</span>
 <span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a>| Atlaižu grupa |   |   |   |   |   |   |   |   |   |   |   |   |</span>
-<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a>|----|----|----|----|----|----|----|----|----|----|----|----|----|</span>
+<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a>|------|------|------|------|------|------|------|------|------|------|------|------|------|</span>
 <span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a>|  | Lauks |  | Apraksts |  | Datu tips |  | Izmērs |  | Statuss |  | Ierobežojumi |  |</span>
 <span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a>|  | DiscountGroupID |  | Atlaižu grupas identifikācijas numurs |  | NUMBER |  | Long Integer |  | Primary Key |  | NOT NULL |  |</span>
 <span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a>|  | DiscountGroupName |  | Atlaižu grupas nosaukums |  | VARCHAR2 |  | 100 |  | &nbsp; |  | NOT NULL |  |</span>
 <span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a>|  | DiscountPercentage |  | Preces atlaide % no pamata cenas |  | NUMBER |  | 5,2 |  | &nbsp; |  | CHECK |  |</span>
 <span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a>| Pasūtījums |   |   |   |   |   |   |   |   |   |   |   |   |</span>
-<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a>|----|----|----|----|----|----|----|----|----|----|----|----|----|</span>
+<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a>|------|------|------|------|------|------|------|------|------|------|------|------|------|</span>
 <span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a>|  | **Lauks** |  | **Apraksts** |  | **Datu tips** |  | **Izmērs** |  | **Statuss** |  | **Ierobežojumi** |  |</span>
 <span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a>|  | OrderID |  | Pasūtījums identifikācijas numurs |  | NUMBER |  | &nbsp; |  | Primary Key |  | NOT NULL |  |</span>
 <span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a>|  | ClientID |  | Klienta identifikācijas numurs |  | NUMBER |  | &nbsp; |  | Foreign Key |  | NOT NULL |  |</span>
