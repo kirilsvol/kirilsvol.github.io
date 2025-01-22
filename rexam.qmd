@@ -10,7 +10,6 @@ title: "R Language Exam"
 #| warning: false
 #| error: false
 
-
 # Bibliotēku ielāde ####
 
 # tidayverse datu pakotne
@@ -33,7 +32,7 @@ prices <- tuesdata$big_tech_stock_prices
 companies <- tuesdata$big_tech_companies
 ```
 
-## 3. Veicam sākotnējo izpētes datu analīzi
+## 3. Veicam sākotnējo izpētes datu analīzi (*exploratory statistics*)
 
 Pirms datu analīzes nepieciešamas izpētīt pieejamos datus un koriģēt tos tālākajam darbam
 
@@ -43,6 +42,7 @@ Pirms datu analīzes nepieciešamas izpētīt pieejamos datus un koriģēt tos t
 
 # Datu analīze ####
 # summary statistics
+
 skim(prices)
 skim(companies)
 
@@ -79,61 +79,51 @@ Tālākai apstrāde vai apvienot šīs tabulas ērtākam darbam
 ### Tabulu apvienošana un tabulas manipulācijas
 
 ```{r}
-## Tabulu apvienošana ####
-prices_data <- prices %>% 
-  left_join(companies, by = "stock_symbol")
 ## Tabulu datu tipu pārveidošana ####
-data <- prices_data%>% 
+data <- prices %>% 
+  ## Tabulu apvienošana ####
+  left_join(companies, by = "stock_symbol") %>% 
   mutate(
     # definēja, ka date ir pareizā datu formāta
     date = as.Date(date, format = "%Y%m%d"),
     # pārveidojam nominālos mainīgos par faktoriem
     stock_symbol = as.factor(stock_symbol),
-    company = as.factor(company)
+    company = as.factor(company),
+    # pievienojam jaunu kolonu -  dienas atdevi, kur tiek rēķināta katrai rindai
+    dienas_atdeve = round((close - open) / open * 100, 3)
   ) %>% 
   # starprezultātu saglabāšana
   {. ->> data_with_datatypes } %>% 
     # pārsaucam tabulas kolonu
   rename(
-    "akcija" = "stock_symbol",
-    "datums" = "date",
-    "atversanas_cena" = "open",
-    "augstaka_cena"= "high",
-    "zemaka_cena"="low" ,
-    "slegsanas_cena" = "close",
-    "koregeta_slegsanas_cena" = "adj_close",
-   "akciju_skaits"=  "volume"
+    akcija = stock_symbol,
+    datums = date,
+    atversanas_cena = open,
+    augstaka_cena = high,
+    zemaka_cena = low,
+    slegsanas_cena = close,
+    koregeta_slegsanas_cena = adj_close,
+    akciju_skaits = volume
   ) %>%
-  # pievienojam jaunu kolonu -  dienas atdevi, kur tiek rēķināta katrai rindai
-  mutate(
-    dienas_atdeve = round((prices_data$close - prices_data$open) / prices_data$open * 100,3)
-  ) %>% 
+  select(akcija, datums, atversanas_cena, augstaka_cena, zemaka_cena, slegsanas_cena, akciju_skaits, company, dienas_atdeve) %>%
   glimpse()
 
  
 ```
 
-Pēc datu sakārtošanas var atkārtot izpētes datu analīzi (*exploratory statistics*)
-
-```{r}
-# veicam atkārtotu datu novērtēšanu
-skim(data)
-str(data)
-summary(data)
-```
-
 Rezultātā ir iegūta viena, apvienota, tabula, ar mainītiem datu tipiem un tulkotiem nosaukumiem.
 
-## Aprakstošā statistika
+## 4. Aprakstošā statistika
 
 Dati ir par akciju rezultātiem no 2010. gada 1. janvāra, līdz 2022. gada 29. decembrim. Lai labāk izpētītu šos datus, nepieciešams izveidot papildus
 
-### Sākotnējā datu vizualizācija
+### 4.1 Sākotnējā datu vizualizācija
 
 Nepieciešams iepazīties ar sākotnējiem datiem, lai izvrizītu pētāmos jautājumus vai nakotnes hipotēzes
 
 ```{r}
 #| warning: false
+
 # grafiku attēlošanas funkcijas inicializēšana
 plot_stock <- function(comp){
   # Izveidojam mainīgo ar filtrētiem datiem
@@ -174,23 +164,54 @@ plot_stock <- function(comp){
 for (stock in unique(data$company)){
   print(plot_stock(stock))
 }
+
 ```
 
-### Apskatīt akciju sumāros rezultātus
+**Šadi varam saglabāt attēlus**
+
+```{r}
+# ggsave("ggplot_example.png", plot = p, width = 8, height = 6, dpi = 300)
+```
+
+## 5. Datu analīze
+
+### 5.1 Apskatīt akciju sumāros rezultātus
 
 Akciju vidējais pārdotias skaits, vidējā dienas atdeve un tās standartnovirze
 
 ```{r}
  #apllūkojam uzņēmumu aprakstošo satistiku
-data %>% 
-  # grupējam datus pēc uzņēmuma
+data %>%
+  # sagrubējam visus datus pēc uzņēmumiem
   group_by(company) %>% 
-  # veicam vēlamo datu attēlošanu
   summarise(
-    vid_akciju_skaits = mean(akciju_skaits),
-    vid_dienas_atdeve = round(mean(dienas_atdeve),3),
-    standartnovirze = round(sd(dienas_atdeve),3)
-    ) %>% 
-  # sortējam datus pēc izvēlētās kolonas
-  arrange(vid_akciju_skaits)
+    # vidējais pārdotais akciju daudzums
+    avg_volume = mean(akciju_skaits, na.rm = TRUE),
+    # lielākais pārdoto akciju daudzums dienā
+    max_volume = max(akciju_skaits, na.rm = TRUE),
+    # mazākais pārdoto akciju daudzums dienā
+    min_volume = min(akciju_skaits, na.rm = TRUE),
+    # vidējais peļņas rādītājs par periodu
+    avg_daily_return = round(mean(dienas_atdeve, na.rm = TRUE), 3),
+    # dienas atdeves standartnovirze
+    sd_daily_return = round(sd(dienas_atdeve, na.rm = TRUE), 3),
+    # vidējā akcijas slēgšanas cena
+    avg_close = round(mean(slegsanas_cena, na.rm = TRUE), 2),
+    # maksimālā akcijas slēgšanas cena
+    max_close = max(slegsanas_cena, na.rm = TRUE),
+    # minimālā akcijas slēgšanas cena
+    min_close = min(slegsanas_cena, na.rm = TRUE),
+    # Volatility - vidējā dienas akcijas cenu izmaiņa (augstākā- zemākā cena)
+    avg_volatility = round(mean(augstaka_cena - zemaka_cena, na.rm = TRUE), 2),
+    # Kopējā kimilatīvā atdeve par visu periodu 
+    cumulative_return = round(((last(slegsanas_cena) - first(slegsanas_cena)) / first(slegsanas_cena)) * 100, 2),
+    # kopējās akcijas pārdošanas dienu skaits periodā
+    total_trading_days = n(),
+    # perioda pirmā diena
+    first_date = min(datums),
+    last_date = max(datums)
+  ) %>% 
+  arrange(desc(avg_volume)) %>% 
+  tibble()
+
 ```
