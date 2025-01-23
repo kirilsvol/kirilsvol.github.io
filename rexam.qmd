@@ -76,7 +76,7 @@ Kopumā tabulas ir nelielas, kolonu zinā, bet kopējais datu apjoms ir ievēroj
 
 Tālākai apstrāde vai apvienot šīs tabulas ērtākam darbam
 
-### Tabulu apvienošana un tabulas manipulācijas
+### 3.1 Tabulu apvienošana un tabulas manipulācijas
 
 ```{r}
 ## Tabulu datu tipu pārveidošana ####
@@ -105,8 +105,8 @@ data <- prices %>%
     koregeta_slegsanas_cena = adj_close,
     akciju_skaits = volume
   ) %>%
-  select(akcija, datums, atversanas_cena, augstaka_cena, zemaka_cena, slegsanas_cena, akciju_skaits, company, dienas_atdeve) %>%
-  glimpse()
+  select(akcija, datums, atversanas_cena, augstaka_cena, zemaka_cena, slegsanas_cena, akciju_skaits, company, dienas_atdeve)
+data
 
  
 ```
@@ -211,7 +211,112 @@ data %>%
     first_date = min(datums),
     last_date = max(datums)
   ) %>% 
-  arrange(desc(avg_volume)) %>% 
-  tibble()
+  arrange(desc(avg_volume))
+
+```
+
+## 6. Datu modeļu
+
+### 6.1 Lineārā regresijas modeļa izveide
+
+```{r}
+#| warning: false
+#| error: false
+
+# Filtrējam datus tikai vienam uzņēmumam, piemēram, "Apple"
+apple_data <- data %>% filter(company == "Apple Inc.")
+
+# Veicam lineāro regresiju: Slēgšanas cena kā atkarīgais mainīgais no atvēršanas cenas
+linear_model_apple <- lm(slegsanas_cena ~ atversanas_cena + akciju_skaits + dienas_atdeve, data = apple_data)
+
+# Izvadam modeļa kopsavilkumu
+summary(linear_model_apple)
+
+
+```
+
+**Svarīgākie modeļa parametri:**
+
+-   **Koeficienti:** Parāda, kā mainās slēgšanas cena, ja neatkarīgie mainīgie mainās par vienu vienību.
+
+-   **P-vērtība:** Indikē, vai attiecīgais mainīgais ir statistiski nozīmīgs.
+
+-   **R\^2:** Paskaidro, cik liela daļa no slēgšanas cenas variācijas tiek izskaidrota ar izvēlētajiem mainīgajiem.
+
+-   **Residuals:** Atlikumu analīze, lai novērtētu modeļa piemērotību.
+
+### 6.2 Modeļa prognoze
+
+```{r}
+# Veicam prognozi ar jauniem datiem konkrētam uzņēmumam
+new_apple_data <- data.frame(
+  atversanas_cena = c(150, 200, 250),
+  akciju_skaits = c(1000000, 1500000, 2000000),
+  dienas_atdeve = c(1.5, 2.0, -0.5)
+)
+
+apple_predictions <- predict(linear_model_apple, new_apple_data)
+new_apple_data$slegsanas_cena_pred <- apple_predictions
+
+# Izvadām prognozētās vērtības
+new_apple_data
+
+
+```
+
+### 6.3 Modeļa vizualizācija
+
+```{r}
+# Grafiks faktiskajām un prognozētajām vērtībām vienam uzņēmumam
+ggplot(apple_data, aes(x = atversanas_cena, y = slegsanas_cena)) +
+  geom_point(color = "blue", alpha = 0.5) +
+  geom_smooth(method = "lm", color = "red") +
+  labs(title = "Apple slēgšanas cenas prognoze pēc atvēršanas cenas",
+       x = "Atvēršanas cena",
+       y = "Slēgšanas cena") +
+  theme_minimal()
+
+```
+
+## 7. Ieguldījumu funkcija
+
+```{r}
+#| warning: false
+#| error: false
+
+# Funkcija investīcijas peļņas aprēķinam visām kompānijām
+investicija_peļņa_visam <- function(sakotneja_suma) {
+  
+  # Aprēķinam peļņu katrai kompānijai
+  rezultati <- data %>%
+    group_by(company) %>%  # Grupējam datus pēc kompānijas nosaukuma
+    arrange(datums) %>%    # Kārtojam datus pēc datuma hronoloģiskā secībā
+    summarise(
+      sakuma_datums = first(datums),  # Iegūstam pirmo pieejamo datumu
+      beigu_datums = last(datums),    # Iegūstam pēdējo pieejamo datumu
+      sakuma_cena = first(slegsanas_cena),  # Iegūstam akcijas sākuma cenu
+      beigu_cena = last(slegsanas_cena),    # Iegūstam akcijas beigu cenu
+      .groups = "drop"  # Atceļam grupēšanu pēc apstrādes
+    ) %>%
+    mutate(
+      # Aprēķinām kopējo peļņu ieguldījuma periodā
+      pelna = round(sakotneja_suma * (beigu_cena / sakuma_cena) - sakotneja_suma,),
+      # Aprēķinām procentuālo pieaugumu ieguldījuma periodā
+      pieaugums_proc = round((beigu_cena - sakuma_cena) / sakuma_cena * 100
+    ),2) %>%
+    select(company, pelna, pieaugums_proc) %>%  # Atlasām vajadzīgās kolonnas
+    rename(
+      "Uzņēmums" = company,  # Pārsaucam kompānijas kolonnu
+      "Peļņa (EUR)" = pelna,  # Pārsaucam peļņas kolonnu
+      "Peļņa (%)" = pieaugums_proc  # Pārsaucam peļņas procentu kolonnu
+    ) %>% 
+    arrange(desc(`Peļņa (EUR)`))  # Kārtojam pēc lielākās peļņas dilstošā secībā
+  
+  return(rezultati)  # Atgriežam rezultātu tabulu
+}
+
+# Piemērs funkcijas izsaukšanai ar ieguldījumu 1000 EUR
+investicija_peļņa_visam(sakotneja_suma = 1000)  # Izsaucam funkciju ar piemēra summu
+
 
 ```

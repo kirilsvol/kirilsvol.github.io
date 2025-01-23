@@ -189,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#datu-ielāde" id="toc-datu-ielāde" class="nav-link" data-scroll-target="#datu-ielāde">2. Datu ielāde</a></li>
   <li><a href="#veicam-sākotnējo-izpētes-datu-analīzi-exploratory-statistics" id="toc-veicam-sākotnējo-izpētes-datu-analīzi-exploratory-statistics" class="nav-link" data-scroll-target="#veicam-sākotnējo-izpētes-datu-analīzi-exploratory-statistics">3. Veicam sākotnējo izpētes datu analīzi (<em>exploratory statistics</em>)</a>
   <ul class="collapse">
-  <li><a href="#tabulu-apvienošana-un-tabulas-manipulācijas" id="toc-tabulu-apvienošana-un-tabulas-manipulācijas" class="nav-link" data-scroll-target="#tabulu-apvienošana-un-tabulas-manipulācijas">Tabulu apvienošana un tabulas manipulācijas</a></li>
+  <li><a href="#tabulu-apvienošana-un-tabulas-manipulācijas" id="toc-tabulu-apvienošana-un-tabulas-manipulācijas" class="nav-link" data-scroll-target="#tabulu-apvienošana-un-tabulas-manipulācijas">3.1 Tabulu apvienošana un tabulas manipulācijas</a></li>
   </ul></li>
   <li><a href="#aprakstošā-statistika" id="toc-aprakstošā-statistika" class="nav-link" data-scroll-target="#aprakstošā-statistika">4. Aprakstošā statistika</a>
   <ul class="collapse">
@@ -199,6 +199,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#apskatīt-akciju-sumāros-rezultātus" id="toc-apskatīt-akciju-sumāros-rezultātus" class="nav-link" data-scroll-target="#apskatīt-akciju-sumāros-rezultātus">5.1 Apskatīt akciju sumāros rezultātus</a></li>
   </ul></li>
+  <li><a href="#datu-modeļu" id="toc-datu-modeļu" class="nav-link" data-scroll-target="#datu-modeļu">6. Datu modeļu</a>
+  <ul class="collapse">
+  <li><a href="#lineārā-regresijas-modeļa-izveide" id="toc-lineārā-regresijas-modeļa-izveide" class="nav-link" data-scroll-target="#lineārā-regresijas-modeļa-izveide">6.1 Lineārā regresijas modeļa izveide</a></li>
+  <li><a href="#modeļa-prognoze" id="toc-modeļa-prognoze" class="nav-link" data-scroll-target="#modeļa-prognoze">6.2 Modeļa prognoze</a></li>
+  <li><a href="#modeļa-vizualizācija" id="toc-modeļa-vizualizācija" class="nav-link" data-scroll-target="#modeļa-vizualizācija">6.3 Modeļa vizualizācija</a></li>
+  </ul></li>
+  <li><a href="#ieguldījumu-funkcija" id="toc-ieguldījumu-funkcija" class="nav-link" data-scroll-target="#ieguldījumu-funkcija">7. Ieguldījumu funkcija</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -594,7 +601,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Kopumā tabulas ir nelielas, kolonu zinā, bet kopējais datu apjoms ir ievērojams - 45088 tabulas ieraksti un 0 trūkošo datu.</p>
 <p>Tālākai apstrāde vai apvienot šīs tabulas ērtākam darbam</p>
 <section id="tabulu-apvienošana-un-tabulas-manipulācijas" class="level3">
-<h3 class="anchored" data-anchor-id="tabulu-apvienošana-un-tabulas-manipulācijas">Tabulu apvienošana un tabulas manipulācijas</h3>
+<h3 class="anchored" data-anchor-id="tabulu-apvienošana-un-tabulas-manipulācijas">3.1 Tabulu apvienošana un tabulas manipulācijas</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Tabulu datu tipu pārveidošana ####</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> prices <span class="sc">%&gt;%</span> </span>
@@ -622,20 +629,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">koregeta_slegsanas_cena =</span> adj_close,</span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">akciju_skaits =</span> volume</span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(akcija, datums, atversanas_cena, augstaka_cena, zemaka_cena, slegsanas_cena, akciju_skaits, company, dienas_atdeve) <span class="sc">%&gt;%</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(akcija, datums, atversanas_cena, augstaka_cena, zemaka_cena, slegsanas_cena, akciju_skaits, company, dienas_atdeve)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Rows: 45,088
-Columns: 9
-$ akcija          &lt;fct&gt; AAPL, AAPL, AAPL, AAPL, AAPL, AAPL, AAPL, AAPL, AAPL, …
-$ datums          &lt;date&gt; 2010-01-04, 2010-01-05, 2010-01-06, 2010-01-07, 2010-…
-$ atversanas_cena &lt;dbl&gt; 7.622500, 7.664286, 7.656429, 7.562500, 7.510714, 7.60…
-$ augstaka_cena   &lt;dbl&gt; 7.660714, 7.699643, 7.686786, 7.571429, 7.571429, 7.60…
-$ zemaka_cena     &lt;dbl&gt; 7.585000, 7.616071, 7.526786, 7.466071, 7.466429, 7.44…
-$ slegsanas_cena  &lt;dbl&gt; 7.643214, 7.656429, 7.534643, 7.520714, 7.570714, 7.50…
-$ akciju_skaits   &lt;dbl&gt; 493729600, 601904800, 552160000, 477131200, 447610800,…
-$ company         &lt;fct&gt; "Apple Inc.", "Apple Inc.", "Apple Inc.", "Apple Inc."…
-$ dienas_atdeve   &lt;dbl&gt; 0.272, -0.103, -1.591, -0.553, 0.799, -1.264, -0.703, …</code></pre>
+<pre><code># A tibble: 45,088 × 9
+   akcija datums     atversanas_cena augstaka_cena zemaka_cena slegsanas_cena
+   &lt;fct&gt;  &lt;date&gt;               &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;
+ 1 AAPL   2010-01-04            7.62          7.66        7.58           7.64
+ 2 AAPL   2010-01-05            7.66          7.70        7.62           7.66
+ 3 AAPL   2010-01-06            7.66          7.69        7.53           7.53
+ 4 AAPL   2010-01-07            7.56          7.57        7.47           7.52
+ 5 AAPL   2010-01-08            7.51          7.57        7.47           7.57
+ 6 AAPL   2010-01-11            7.6           7.61        7.44           7.50
+ 7 AAPL   2010-01-12            7.47          7.49        7.37           7.42
+ 8 AAPL   2010-01-13            7.42          7.53        7.29           7.52
+ 9 AAPL   2010-01-14            7.50          7.52        7.46           7.48
+10 AAPL   2010-01-15            7.53          7.56        7.35           7.35
+# ℹ 45,078 more rows
+# ℹ 3 more variables: akciju_skaits &lt;dbl&gt;, company &lt;fct&gt;, dienas_atdeve &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Rezultātā ir iegūta viena, apvienota, tabula, ar mainītiem datu tipiem un tulkotiem nosaukumiem.</p>
@@ -829,8 +840,7 @@ $ dienas_atdeve   &lt;dbl&gt; 0.272, -0.103, -1.591, -0.553, 0.799, -1.264, -0.7
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_date =</span> <span class="fu">min</span>(datums),</span>
 <span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">last_date =</span> <span class="fu">max</span>(datums)</span>
 <span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_volume)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_volume))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 14 × 14
    company     avg_volume max_volume min_volume avg_daily_return sd_daily_return
@@ -854,9 +864,158 @@ $ dienas_atdeve   &lt;dbl&gt; 0.272, -0.103, -1.591, -0.553, 0.799, -1.264, -0.7
 #   first_date &lt;date&gt;, last_date &lt;date&gt;</code></pre>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="datu-modeļu" class="level2">
+<h2 class="anchored" data-anchor-id="datu-modeļu">6. Datu modeļu</h2>
+<section id="lineārā-regresijas-modeļa-izveide" class="level3">
+<h3 class="anchored" data-anchor-id="lineārā-regresijas-modeļa-izveide">6.1 Lineārā regresijas modeļa izveide</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrējam datus tikai vienam uzņēmumam, piemēram, "Apple"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>apple_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(company <span class="sc">==</span> <span class="st">"Apple Inc."</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Veicam lineāro regresiju: Slēgšanas cena kā atkarīgais mainīgais no atvēršanas cenas</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>linear_model_apple <span class="ot">&lt;-</span> <span class="fu">lm</span>(slegsanas_cena <span class="sc">~</span> atversanas_cena <span class="sc">+</span> akciju_skaits <span class="sc">+</span> dienas_atdeve, <span class="at">data =</span> apple_data)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Izvadam modeļa kopsavilkumu</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(linear_model_apple)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = slegsanas_cena ~ atversanas_cena + akciju_skaits + 
+    dienas_atdeve, data = apple_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.6572 -0.2594  0.0099  0.2683  6.0308 
+
+Coefficients:
+                  Estimate Std. Error  t value Pr(&gt;|t|)    
+(Intercept)     -6.128e-02  3.173e-02   -1.932   0.0535 .  
+atversanas_cena  1.000e+00  3.157e-04 3169.500   &lt;2e-16 ***
+akciju_skaits    1.729e-10  6.728e-11    2.569   0.0102 *  
+dienas_atdeve    6.152e-01  9.256e-03   66.464   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7399 on 3267 degrees of freedom
+Multiple R-squared:  0.9998,    Adjusted R-squared:  0.9998 
+F-statistic: 4.462e+06 on 3 and 3267 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><strong>Svarīgākie modeļa parametri:</strong></p>
+<ul>
+<li><p><strong>Koeficienti:</strong> Parāda, kā mainās slēgšanas cena, ja neatkarīgie mainīgie mainās par vienu vienību.</p></li>
+<li><p><strong>P-vērtība:</strong> Indikē, vai attiecīgais mainīgais ir statistiski nozīmīgs.</p></li>
+<li><p><strong>R^2:</strong> Paskaidro, cik liela daļa no slēgšanas cenas variācijas tiek izskaidrota ar izvēlētajiem mainīgajiem.</p></li>
+<li><p><strong>Residuals:</strong> Atlikumu analīze, lai novērtētu modeļa piemērotību.</p></li>
+</ul>
+</section>
+<section id="modeļa-prognoze" class="level3">
+<h3 class="anchored" data-anchor-id="modeļa-prognoze">6.2 Modeļa prognoze</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Veicam prognozi ar jauniem datiem konkrētam uzņēmumam</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>new_apple_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">atversanas_cena =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">250</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">akciju_skaits =</span> <span class="fu">c</span>(<span class="dv">1000000</span>, <span class="dv">1500000</span>, <span class="dv">2000000</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">dienas_atdeve =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">2.0</span>, <span class="sc">-</span><span class="fl">0.5</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>apple_predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(linear_model_apple, new_apple_data)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>new_apple_data<span class="sc">$</span>slegsanas_cena_pred <span class="ot">&lt;-</span> apple_predictions</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Izvadām prognozētās vērtības</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>new_apple_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  atversanas_cena akciju_skaits dienas_atdeve slegsanas_cena_pred
+1             150       1000000           1.5            150.9300
+2             200       1500000           2.0            201.2605
+3             250       2000000          -0.5            249.7453</code></pre>
+</div>
+</div>
+</section>
+<section id="modeļa-vizualizācija" class="level3">
+<h3 class="anchored" data-anchor-id="modeļa-vizualizācija">6.3 Modeļa vizualizācija</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Grafiks faktiskajām un prognozētajām vērtībām vienam uzņēmumam</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(apple_data, <span class="fu">aes</span>(<span class="at">x =</span> atversanas_cena, <span class="at">y =</span> slegsanas_cena)) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Apple slēgšanas cenas prognoze pēc atvēršanas cenas"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Atvēršanas cena"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Slēgšanas cena"</span>) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rexam_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="ieguldījumu-funkcija" class="level2">
+<h2 class="anchored" data-anchor-id="ieguldījumu-funkcija">7. Ieguldījumu funkcija</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Funkcija investīcijas peļņas aprēķinam visām kompānijām</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>investicija_peļņa_visam <span class="ot">&lt;-</span> <span class="cf">function</span>(sakotneja_suma) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aprēķinam peļņu katrai kompānijai</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  rezultati <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(company) <span class="sc">%&gt;%</span>  <span class="co"># Grupējam datus pēc kompānijas nosaukuma</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(datums) <span class="sc">%&gt;%</span>    <span class="co"># Kārtojam datus pēc datuma hronoloģiskā secībā</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">sakuma_datums =</span> <span class="fu">first</span>(datums),  <span class="co"># Iegūstam pirmo pieejamo datumu</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">beigu_datums =</span> <span class="fu">last</span>(datums),    <span class="co"># Iegūstam pēdējo pieejamo datumu</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">sakuma_cena =</span> <span class="fu">first</span>(slegsanas_cena),  <span class="co"># Iegūstam akcijas sākuma cenu</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">beigu_cena =</span> <span class="fu">last</span>(slegsanas_cena),    <span class="co"># Iegūstam akcijas beigu cenu</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span>  <span class="co"># Atceļam grupēšanu pēc apstrādes</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Aprēķinām kopējo peļņu ieguldījuma periodā</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">pelna =</span> <span class="fu">round</span>(sakotneja_suma <span class="sc">*</span> (beigu_cena <span class="sc">/</span> sakuma_cena) <span class="sc">-</span> sakotneja_suma,),</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Aprēķinām procentuālo pieaugumu ieguldījuma periodā</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">pieaugums_proc =</span> <span class="fu">round</span>((beigu_cena <span class="sc">-</span> sakuma_cena) <span class="sc">/</span> sakuma_cena <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    ),<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(company, pelna, pieaugums_proc) <span class="sc">%&gt;%</span>  <span class="co"># Atlasām vajadzīgās kolonnas</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Uzņēmums"</span> <span class="ot">=</span> company,  <span class="co"># Pārsaucam kompānijas kolonnu</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Peļņa (EUR)"</span> <span class="ot">=</span> pelna,  <span class="co"># Pārsaucam peļņas kolonnu</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Peļņa (%)"</span> <span class="ot">=</span> pieaugums_proc  <span class="co"># Pārsaucam peļņas procentu kolonnu</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="st">`</span><span class="at">Peļņa (EUR)</span><span class="st">`</span>))  <span class="co"># Kārtojam pēc lielākās peļņas dilstošā secībā</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(rezultati)  <span class="co"># Atgriežam rezultātu tabulu</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Piemērs funkcijas izsaukšanai ar ieguldījumu 1000 EUR</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>investicija_peļņa<span class="fu">_visam</span>(<span class="at">sakotneja_suma =</span> <span class="dv">1000</span>)  <span class="co"># Izsaucam funkciju ar piemēra summu</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 3
+   Uzņēmums                                    `Peļņa (EUR)` `Peļņa (%)`
+   &lt;fct&gt;                                               &lt;dbl&gt;       &lt;dbl&gt;
+ 1 Tesla, Inc.                                         75681        7568
+ 2 Netflix, Inc.                                       37105        3710
+ 3 NVIDIA Corporation                                  30591        3059
+ 4 Apple Inc.                                          15958        1596
+ 5 Amazon.com, Inc.                                    11574        1157
+ 6 Adobe Inc.                                           8102         810
+ 7 Microsoft Corporation                                6787         679
+ 8 Salesforce, Inc.                                     6086         609
+ 9 Alphabet Inc.                                        4639         464
+10 Meta Platforms, Inc.                                 2744         274
+11 Oracle Corporation                                   2276         228
+12 Cisco Systems, Inc.                                   924          92
+13 Intel Corporation                                     255          26
+14 International Business Machines Corporation           114          11</code></pre>
+</div>
+</div>
+
+
 </section>
 </section>
 
