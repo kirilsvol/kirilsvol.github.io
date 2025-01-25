@@ -16,6 +16,8 @@ title: "R Language Exam"
 library(tidyverse)
 # datu iepazīšanās pakotne
 library(skimr)
+# tabulu attēlošanai
+library(kableExtra)
 
 ```
 
@@ -79,6 +81,8 @@ Tālākai apstrāde vai apvienot šīs tabulas ērtākam darbam
 ### 3.1 Tabulu apvienošana un tabulas manipulācijas
 
 ```{r}
+#| warning: false
+#| error: false
 ## Tabulu datu tipu pārveidošana ####
 data <- prices %>% 
   ## Tabulu apvienošana ####
@@ -92,8 +96,7 @@ data <- prices %>%
     # pievienojam jaunu kolonu -  dienas atdevi, kur tiek rēķināta katrai rindai
     dienas_atdeve = round((close - open) / open * 100, 3)
   ) %>% 
-  # starprezultātu saglabāšana
-  {. ->> data_with_datatypes } %>% 
+  
     # pārsaucam tabulas kolonu
   rename(
     akcija = stock_symbol,
@@ -105,8 +108,22 @@ data <- prices %>%
     koregeta_slegsanas_cena = adj_close,
     akciju_skaits = volume
   ) %>%
+  # noapaļojam kolonas
+  mutate(
+    atversanas_cena = round(atversanas_cena,3),
+    augstaka_cena = round(augstaka_cena,3),
+    zemaka_cena = round(zemaka_cena,3),
+    slegsanas_cena = round(slegsanas_cena,3)
+  ) %>%  
+  # attēlošanai izvēlamies noteiktās kolonas
   select(akcija, datums, atversanas_cena, augstaka_cena, zemaka_cena, slegsanas_cena, akciju_skaits, company, dienas_atdeve)
-data
+
+
+data %>% 
+  slice_head(n = 100) %>% 
+  kbl() %>% 
+  kable_styling(full_width = FALSE) %>%
+  scroll_box(width = "100%", height = "400px")
 
  
 ```
@@ -211,13 +228,23 @@ data %>%
     first_date = min(datums),
     last_date = max(datums)
   ) %>% 
-  arrange(desc(avg_volume))
+  arrange(desc(avg_volume)) %>% 
+  {. ->> data_1 }
+
+data_1 %>% 
+  kbl() %>% 
+  kable_styling(full_width = FALSE) %>%
+  scroll_box(width = "100%", height = "400px")
 
 ```
 
 ## 6. Datu modeļu
 
 ### 6.1 Lineārā regresijas modeļa izveide
+
+Lineārār regresijas formula
+
+$\text{slegsanas\_cena} = \beta_0 + \beta_1 \cdot \text{atversanas\_cena} + \beta_2 \cdot \text{akciju\_skaits} + \beta_3 \cdot \text{dienas\_atdeve} + \varepsilon$
 
 ```{r}
 #| warning: false
@@ -254,31 +281,39 @@ new_apple_data <- data.frame(
   akciju_skaits = c(1000000, 1500000, 2000000),
   dienas_atdeve = c(1.5, 2.0, -0.5)
 )
-
+# izveidojam jaunu prognozes mainīgo
 apple_predictions <- predict(linear_model_apple, new_apple_data)
 new_apple_data$slegsanas_cena_pred <- apple_predictions
-
 # Izvadām prognozētās vērtības
-new_apple_data
-
-
+new_apple_data %>% kbl()
 ```
 
 ### 6.3 Modeļa vizualizācija
 
 ```{r}
-# Grafiks faktiskajām un prognozētajām vērtībām vienam uzņēmumam
-ggplot(apple_data, aes(x = atversanas_cena, y = slegsanas_cena)) +
-  geom_point(color = "blue", alpha = 0.5) +
-  geom_smooth(method = "lm", color = "red") +
-  labs(title = "Apple slēgšanas cenas prognoze pēc atvēršanas cenas",
+# Combine actual and predicted data
+new_apple_data$source <- "Prediction"
+apple_data$source <- "Actual"
+
+combined_data <- bind_rows(
+  apple_data %>% select(atversanas_cena, slegsanas_cena) %>% mutate(source = "Actual"),
+  new_apple_data %>% rename(slegsanas_cena = slegsanas_cena_pred) %>% mutate(source = "Prediction")
+)
+
+# Plot actual vs predicted values
+ggplot(combined_data, aes(x = atversanas_cena, y = slegsanas_cena, color = source)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(data = apple_data, aes(x = atversanas_cena, y = slegsanas_cena), method = "lm", color = "red") +
+  labs(title = "Apple slēgšanas cenas prognoze un faktiskās vērtības",
        x = "Atvēršanas cena",
        y = "Slēgšanas cena") +
-  theme_minimal()
-
+  theme_minimal() +
+  scale_color_manual(values = c("Actual" = "blue", "Prediction" = "green"))
 ```
 
 ## 7. Ieguldījumu funkcija
+
+### hipotēze :  Ieguldot 1000 eiro Apple Inc., pēc 12 gadiem, tiks saņemta lielākā peļņa
 
 ```{r}
 #| warning: false
@@ -292,8 +327,6 @@ investicija_peļņa_visam <- function(sakotneja_suma) {
     group_by(company) %>%  # Grupējam datus pēc kompānijas nosaukuma
     arrange(datums) %>%    # Kārtojam datus pēc datuma hronoloģiskā secībā
     summarise(
-      sakuma_datums = first(datums),  # Iegūstam pirmo pieejamo datumu
-      beigu_datums = last(datums),    # Iegūstam pēdējo pieejamo datumu
       sakuma_cena = first(slegsanas_cena),  # Iegūstam akcijas sākuma cenu
       beigu_cena = last(slegsanas_cena),    # Iegūstam akcijas beigu cenu
       .groups = "drop"  # Atceļam grupēšanu pēc apstrādes
@@ -310,13 +343,52 @@ investicija_peļņa_visam <- function(sakotneja_suma) {
       "Peļņa (EUR)" = pelna,  # Pārsaucam peļņas kolonnu
       "Peļņa (%)" = pieaugums_proc  # Pārsaucam peļņas procentu kolonnu
     ) %>% 
-    arrange(desc(`Peļņa (EUR)`))  # Kārtojam pēc lielākās peļņas dilstošā secībā
-  
+    arrange(desc(`Peļņa (EUR)`)  # Kārtojam pēc lielākās peļņas dilstošā secībā
+    ) %>% kbl() %>% 
+    kable_styling(full_width = FALSE) %>%
+    scroll_box(width = "100%", height = "400px")
+    
   return(rezultati)  # Atgriežam rezultātu tabulu
 }
 
 # Piemērs funkcijas izsaukšanai ar ieguldījumu 1000 EUR
 investicija_peļņa_visam(sakotneja_suma = 1000)  # Izsaucam funkciju ar piemēra summu
 
+```
 
+```{r}
+#| warning: false
+#| error: false
+
+# Izveidojam datus grafika attēlošanai
+plot_data <- data %>%
+  group_by(company) %>%
+  arrange(datums) %>%
+  summarise(
+    sakuma_cena = first(slegsanas_cena),
+    beigu_cena = last(slegsanas_cena),
+    pelna = round(1000 * (last(slegsanas_cena) / first(slegsanas_cena)) - 1000),
+    pieaugums_proc = round((last(slegsanas_cena) - first(slegsanas_cena)) / first(slegsanas_cena) * 100, 2),
+    .groups = "drop"
+  ) %>%
+
+  select(company, pelna, pieaugums_proc) %>%
+  rename(
+    "Uzņēmums" = company,
+    "Peļņa (EUR)" = pelna,
+    "Peļņa (%)" = pieaugums_proc,
+    
+  ) %>%
+  arrange(desc(`Peļņa (EUR)`))
+
+ggplot(plot_data, aes(x = reorder(`Uzņēmums`, `Peļņa (EUR)`), y = `Peļņa (EUR)`)) +
+  # Pievienojam barchart, count vietā, liekam attēlot plot_data datus
+  geom_bar(stat = "identity", fill = "steelblue") +
+  # Pagriežam koordinātu sistēmu, lai joslas būtu horizontālas
+  coord_flip() +
+  # Pievienojam diagrammas nosaukumu un ass nosaukumus
+  labs(title = "Kompāniju peļņa no sākotnējā ieguldījuma",
+       x = "Uzņēmums",
+       y = "Peļņa (EUR)") +
+  theme_minimal()
 ```

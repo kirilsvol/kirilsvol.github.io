@@ -1,1 +1,7 @@
 /* css styles */
+.scrollable-table {
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+  border: 1px solid #ccc;
+}
