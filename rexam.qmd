@@ -313,7 +313,7 @@ ggplot(combined_data, aes(x = atversanas_cena, y = slegsanas_cena, color = sourc
 
 ## 7. Ieguldījumu funkcija
 
-### hipotēze :  Ieguldot 1000 eiro Apple Inc., pēc 12 gadiem, tiks saņemta lielākā peļņa
+### hipotēze : Ieguldot 1000 eiro Apple Inc., pēc 12 gadiem, tiks saņemta lielākā peļņa
 
 ```{r}
 #| warning: false
